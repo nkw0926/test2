@@ -1,133 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-	<meta charset="utf-8">
-	<meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-	<title>프로필 사진 전체 조회</title>
-	<meta content="" name="description">
-	<meta content="" name="keywords">
-
-	<!-- Favicons -->
-	<link href="assets/img/favicon.png" rel="icon">
-	<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-	<!-- Google Fonts -->
-	<link href="https://fonts.gstatic.com" rel="preconnect">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-	<!-- Vendor CSS Files -->
-	<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-	<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-	<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-	<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-	<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-	<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-	<!-- Template Main CSS File -->
-	<link href="assets/css/style.css" rel="stylesheet">
-
-	<style>
-		.custom-box-area {
-			padding: 20px; /* 원하는 padding 값으로 조정 */
-			width: 80%; /* 원하는 가로 크기로 조정 */
-		}
-		/* 표 스타일 */
-		table {
-			border-collapse: collapse;
-			width: 100%;
-		}
-
-		th, td {
-			border: 1px solid #ddd;
-			padding: 8px;
-			width: 80px;
-		}
-
-		th {
-			background-color: #f2f2f2;
-			text-align: left;
-		}
-
-		h2 {
-			margin-top: 15px; font-size: 1.5em;
-		}
-	</style>
-
-</head>
-
-<body style="margin: 70px;">
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-	<div class="row border rounded-2 p-3 bg-white shadow custom-box-area" style="max-width: 1200px;"> <!-- 가로 폭을 원하는 크기로 조정 -->
-		<div class="pagetitle">
-			<h1>Photos</h1>
-		</div>
-		<div style="font-size: 14px; color: blue;">[[${message}]]</div>
-		<div th:each="usersWithPhotosFinal : ${allUsersWithPhotosFinal}">
-			<h2 th:text="${usersWithPhotosFinal.userName}"></h2>
-			<table>
-
-				<thead>
-				<tr>
-					<th>Photo</th>
-					<th>Delete</th>
-					<th>Photo</th>
-					<th>Delete</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr th:each="row : ${usersWithPhotosFinal.photos}"
-					th:if="${rowStat.index % 2 == 0}">
-					<td>
-						<!-- 첫 번째 사진의 이미지 파일 경로 설정 --> <a
-							th:href="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${row.photoFileName}}"
-							data-lightbox="photos" data-title="User Photo"> <img
-							th:src="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${row.photoFileName}}"
-							width="200" height="200" alt="Photo">
+<head th:replace="~{/include/admin-header :: header}">
+<body >
+<div th:replace="~{/include/admin-body-header :: bodyHeader}"></div>
+<div id="layoutSidenav">
+	<div id="layoutSidenav_nav">
+		<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+			<div class="sb-sidenav-menu">
+				<div class="nav">
+					<div class="sb-sidenav-menu-heading">Core</div>
+					<a class="nav-link" href="/admin/main">
+						<div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+						사용자 통계
 					</a>
-					</td>
-					<td>
-						<form
-								th:action="@{/admin/photos/delete/{photoId}/{userId}(photoId=${row.photoId},userId=${usersWithPhotosFinal.userId})}"
-								method="post">
-							<div class="input-group mt-2">
-								<button class="btn btn-lg btn-primary w-90 fs-6 fw-bold"
-										type="submit">Delete</button>
-							</div>
-						</form>
-					</td>
+					<a class="nav-link" href="/admin/reports">
+						<div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+						신고 처리 및 신고 내역
+					</a>
+					<a class="nav-link" href="/admin/photos">
+						<div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+						사진 검열
+					</a>
+				</div>
+			</div>
+			<div class="sb-sidenav-footer">
+				<div class="small">Logged in as:</div>
+				금오도
+			</div>
+		</nav>
+	</div>
+	<div id="layoutSidenav_content">
+		<main>
+			<div class="container-fluid px-4">
+				<h1 class="mt-4">사진 검열</h1>
+			</div>
 
-					<!-- 두 번째 사진의 이미지 파일 경로 설정 -->
-					<td
-							th:if="${rowStat.index + 1 < #lists.size(usersWithPhotosFinal.photos)}">
-						<a
-								th:href="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${usersWithPhotosFinal.photos[rowStat.index + 1].photoFileName}}"
-								data-lightbox="photos" data-title="User Photo"> <img
-								th:src="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${usersWithPhotosFinal.photos[rowStat.index + 1].photoFileName}}"
-								width="200" height="200" alt="Photo">
-						</a>
-					</td>
-					<td
-							th:if="${rowStat.index + 1 < #lists.size(usersWithPhotosFinal.photos)}">
-						<form
-								th:action="@{/admin/photos/delete/{photoId}/{userId}(photoId=${usersWithPhotosFinal.photos[rowStat.index + 1].photoId},userId=${usersWithPhotosFinal.userId})}"
-								method="post">
-							<div class="input-group mt-2">
-								<button class="btn btn-lg btn-primary w-90 fs-6 fw-bold"
-										type="submit">Delete</button>
-							</div>
-						</form>
-					</td>
-				</tr>
-				</tbody>
-			</table>
 
-		</div>
+			<div class="container d-flex justify-content-center align-items-center min-vh-100">
+				<div class="row border rounded-2 p-3 bg-white shadow custom-box-area" style="max-width: 1200px;"> <!-- 가로 폭을 원하는 크기로 조정 -->
+					<div class="pagetitle">
+						<h1>Photos</h1>
+					</div>
+					<div style="font-size: 14px; color: blue;">[[${message}]]</div>
+					<div th:each="usersWithPhotosFinal : ${allUsersWithPhotosFinal}">
+						<h2 th:text="${usersWithPhotosFinal.userName}"></h2>
+						<table>
 
+							<thead>
+							<tr>
+								<th>Photo</th>
+								<th>Delete</th>
+								<th>Photo</th>
+								<th>Delete</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="row : ${usersWithPhotosFinal.photos}"
+								th:if="${rowStat.index % 2 == 0}">
+								<td>
+									<!-- 첫 번째 사진의 이미지 파일 경로 설정 --> <a
+										th:href="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${row.photoFileName}}"
+										data-lightbox="photos" data-title="User Photo"> <img
+										th:src="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${row.photoFileName}}"
+										width="200" height="200" alt="Photo">
+								</a>
+								</td>
+								<td>
+									<form
+											th:action="@{/admin/photos/delete/{photoId}/{userId}(photoId=${row.photoId},userId=${usersWithPhotosFinal.userId})}"
+											method="post">
+										<div class="input-group mt-2">
+											<button class="btn btn-lg btn-primary w-90 fs-6 fw-bold"
+													type="submit">Delete</button>
+										</div>
+									</form>
+								</td>
+
+								<!-- 두 번째 사진의 이미지 파일 경로 설정 -->
+								<td
+										th:if="${rowStat.index + 1 < #lists.size(usersWithPhotosFinal.photos)}">
+									<a
+											th:href="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${usersWithPhotosFinal.photos[rowStat.index + 1].photoFileName}}"
+											data-lightbox="photos" data-title="User Photo"> <img
+											th:src="@{'/ocean/assets/img/userImg/' + ${usersWithPhotosFinal.userEmail} + '/' + ${usersWithPhotosFinal.photos[rowStat.index + 1].photoFileName}}"
+											width="200" height="200" alt="Photo">
+									</a>
+								</td>
+								<td
+										th:if="${rowStat.index + 1 < #lists.size(usersWithPhotosFinal.photos)}">
+									<form
+											th:action="@{/admin/photos/delete/{photoId}/{userId}(photoId=${usersWithPhotosFinal.photos[rowStat.index + 1].photoId},userId=${usersWithPhotosFinal.userId})}"
+											method="post">
+										<div class="input-group mt-2">
+											<button class="btn btn-lg btn-primary w-90 fs-6 fw-bold"
+													type="submit">Delete</button>
+										</div>
+									</form>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+
+					</div>
+
+				</div>
+			</div>
+
+
+		</main>
+		<footer class="py-4 bg-light mt-auto">
+			<div class="container-fluid px-4">
+				<div class="d-flex align-items-center justify-content-between small">
+					<div class="text-muted">Copyright &copy; Your Website 2021</div>
+					<div>
+						<a href="#">Privacy Policy</a>
+						&middot;
+						<a href="#">Terms &amp; Conditions</a>
+					</div>
+				</div>
+			</div>
+		</footer>
 	</div>
 </div>
+<!--여기 끝-->
+
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">

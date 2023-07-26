@@ -23,19 +23,16 @@ import jakarta.servlet.http.HttpSession;
 public class AdminController {
     @Autowired
     IUserService userService;
-    private final IAdminService adminService;
-
-
     @Autowired
-    public AdminController(IAdminService adminService) {
-        this.adminService = adminService;
-    }
+    IAdminService adminService;
 
-    @GetMapping("/admin")
+
+    @GetMapping("/main")
     public String adminMain(Model model) {
-        return "admin/admin-main";
+        List<User> allUserList = userService.selectALLFishList();
+        model.addAttribute("allUser", allUserList);
+        return "admin/main";
     }
-
 
     @GetMapping("/reports")
     public String getAllReports(Model model) {
@@ -49,12 +46,6 @@ public class AdminController {
         return "admin/r-test";
     }
 
-    @PostMapping("/reports/change-status")
-    public String changeReportStatus(@RequestParam int reportId, @RequestParam String reportStatus, RedirectAttributes redirectAttributes) {
-        adminService.changeReportStatus(reportId, reportStatus);
-        redirectAttributes.addFlashAttribute("message", "신고 처리 상태가 변경되었습니다.");
-        return "redirect:/admin/reports";
-    }
 
     @GetMapping("/submit")
     public String showSubmitPage(@RequestParam("targetId") int targetId, Model model) {
@@ -74,10 +65,10 @@ public class AdminController {
         return "admin/s-test";
     }
 
-    @RequestMapping(value="/submit", method=RequestMethod.POST)
+    @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public String submitReport(@RequestParam("targetId") int targetId, String reportContent,
-                               HttpSession session,  Model model, RedirectAttributes redirectAttributes) {
-        if(reportContent == null) {
+                               HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (reportContent == null) {
             redirectAttributes.addFlashAttribute("message", "신고 사유를 선택해주세요!");
             return "redirect:/admin/submit?targetId=" + targetId;
         } else {
@@ -86,7 +77,7 @@ public class AdminController {
             // targetId, reporterId, reportContent를 사용하여 신고 기능 처리
             adminService.insertReport(targetId, reporterId, reportContent);
             model.addAttribute("message", "신고가 완료되었습니다.");
-            model.addAttribute("searchUrl","/ocean/all");
+            model.addAttribute("searchUrl", "/ocean/all");
 
             return "/admin/message";
         }
@@ -96,7 +87,7 @@ public class AdminController {
     public String getAllUsersWithPhotos(Model model) {
         List<UserWithPhoto> allUsersWithPhotos = adminService.getAllUsersWithPhotos();
         List<UserWithPhotos> allUsersWithPhotosFinal = new ArrayList<UserWithPhotos>();
-        allUsersWithPhotos.stream().forEach((user)-> {
+        allUsersWithPhotos.stream().forEach((user) -> {
             List<UserPhotos> userPhotoFileNames = adminService.getAllUserWithPhotos(user.getUserId());
 
             UserWithPhotos userWithPhotos = UserWithPhotos.builder()
@@ -114,8 +105,8 @@ public class AdminController {
     }
 
     @PostMapping("/photos/delete/{photoId}/{userId}")
-    public String deletePhoto(@PathVariable int photoId,@PathVariable int userId, RedirectAttributes redirectAttributes) {
-        adminService.deletePhoto(photoId,userId);
+    public String deletePhoto(@PathVariable int photoId, @PathVariable int userId, RedirectAttributes redirectAttributes) {
+        adminService.deletePhoto(photoId, userId);
         redirectAttributes.addFlashAttribute("message", "사진이 삭제되었습니다.");
         return "redirect:/admin/photos";
     }
@@ -130,24 +121,6 @@ public class AdminController {
         model.addAttribute("notices", notices);
 //        return "admin/admin-notices";
         return "admin/n-test";
-    }
-
-
-//@GetMapping("/charts")
-//public String getUsers(Model model) {
-//    // 성별에 따른 사용자 수 가져오기
-//    List<Map<String, Object>> genderCounts = adminService.getUserCountByGender();
-//    System.out.println(genderCounts);
-//    model.addAttribute("genderCounts", genderCounts);
-////        return "admin/user-charts";
-//    return "admin/c-test";
-//}
-
-    @GetMapping("/hesu/charts")
-    public String getUsersCharts(Model model) {
-        List<User> allUserList = userService.selectALLFishList();
-        model.addAttribute("allUser", allUserList);
-        return "admin/main";
     }
 
 
@@ -213,6 +186,7 @@ public class AdminController {
 
         return sexList;
     }
+
     @GetMapping("/agerange/sex/barChart")
     @ResponseBody
     public List<Object> getPieChartAgeRangeSex() {
@@ -237,34 +211,34 @@ public class AdminController {
             int formatedNow = Integer.parseInt(formatter.format(now));
             char sex = allUser.get(i).getUserSex();
             int bornYear = allUser.get(i).getUserAge();
-            if (20 <= (formatedNow - bornYear) && (formatedNow - bornYear) <= 24 ) {
-                if(sex == 'F'){
+            if (20 <= (formatedNow - bornYear) && (formatedNow - bornYear) <= 24) {
+                if (sex == 'F') {
                     e2FemaleCount++;
-                }else{
+                } else {
                     e2MaleCount++;
                 }
             } else if (25 <= (formatedNow - bornYear) && (formatedNow - bornYear) <= 29) {
-                if(sex == 'F'){
+                if (sex == 'F') {
                     l2FemaleCount++;
-                }else{
+                } else {
                     l2MaleCount++;
                 }
             } else if (30 <= (formatedNow - bornYear) && (formatedNow - bornYear) <= 34) {
-                if(sex == 'F'){
+                if (sex == 'F') {
                     e3FemaleCount++;
-                }else{
+                } else {
                     e3MaleCount++;
                 }
             } else if (35 <= (formatedNow - bornYear) && (formatedNow - bornYear) <= 39) {
-                if(sex == 'F'){
+                if (sex == 'F') {
                     l3FemaleCount++;
-                }else{
+                } else {
                     l3MaleCount++;
                 }
             } else {
-                if(sex == 'F'){
+                if (sex == 'F') {
                     oldFCount++;
-                }else{
+                } else {
                     oldMCount++;
                 }
                 //DB에 값 이상하게 들어가있다 나이는 출생년도로 다 바꿔
@@ -285,7 +259,7 @@ public class AdminController {
         maleCountList.add(-l3MaleCount);
         maleCountList.add(-oldMCount);
 
-        List<Object> sexCountList =  new ArrayList<>();
+        List<Object> sexCountList = new ArrayList<>();
         sexCountList.add(femaleCountList);
         sexCountList.add(maleCountList);
         return sexCountList;
