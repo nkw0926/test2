@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.geumodoIsland.fishing.model.Baiting;
 import com.example.geumodoIsland.user.model.User;
 import com.example.geumodoIsland.user.model.UserFirstStep;
 import com.example.geumodoIsland.user.model.UserFourthStep;
@@ -51,30 +52,30 @@ public class UserController {
 
 	@Autowired
 	JavaMailSender javaMailSender;
-	
+
 	@Autowired
 	IUserService userService;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
-	
+
+
 	// 회원가입...(1~5단계)
-	
+
 	@GetMapping("/signup/firststep")
 	public String signUpFirstStep(UserFirstStep userFirstStep,HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
 		model.addAttribute("session",session);
 		return "user/signupFirstStep";
 	}
-	
+
 	@PostMapping("/signup/firststep")
 	public String signUpFirstStep(UserFirstStep userFirstStep, HttpSession session) {
 		session.setAttribute("userEmail", userFirstStep.getUserEmail());
 		session.setAttribute("userName", userFirstStep.getUserName());
 		session.setAttribute("userPassword", userFirstStep.getUserPassword());
-		logger.info("userEmail: " + String.valueOf(session.getAttribute("userEmail")) + ", " +  
-					"userName: " + String.valueOf(session.getAttribute("userName")) );
+		logger.info("userEmail: " + String.valueOf(session.getAttribute("userEmail")) + ", " +
+				"userName: " + String.valueOf(session.getAttribute("userName")) );
 		return "redirect:/user/signup/secondstep";
 	}
 
@@ -92,14 +93,14 @@ public class UserController {
 		session.setAttribute("userAddress", userSecondStep.getUserAddress());
 		session.setAttribute("userPhoneNumber", userSecondStep.getUserPhoneNumber());
 		session.setAttribute("userJob", userSecondStep.getUserJob());
-		
-		logger.info("userAge: " + String.valueOf(session.getAttribute("userAge")) + ", " + 
-					"userSex: " + String.valueOf(session.getAttribute("userSex")) + ", " +
-					"userHeight: " + String.valueOf(session.getAttribute("userHeight")) + ", " +
-					"userBody: " + String.valueOf(session.getAttribute("userBody")) + ", " + 
-					"userAddress: " + String.valueOf(session.getAttribute("userAddress")) + ", " + 
-					"userPhoneNumber: " + String.valueOf(session.getAttribute("userPhoneNumber")) + ", " +
-					"userJob: " + String.valueOf(session.getAttribute("userJob")));
+
+		logger.info("userAge: " + String.valueOf(session.getAttribute("userAge")) + ", " +
+				"userSex: " + String.valueOf(session.getAttribute("userSex")) + ", " +
+				"userHeight: " + String.valueOf(session.getAttribute("userHeight")) + ", " +
+				"userBody: " + String.valueOf(session.getAttribute("userBody")) + ", " +
+				"userAddress: " + String.valueOf(session.getAttribute("userAddress")) + ", " +
+				"userPhoneNumber: " + String.valueOf(session.getAttribute("userPhoneNumber")) + ", " +
+				"userJob: " + String.valueOf(session.getAttribute("userJob")));
 		return "redirect:/user/signup/thirdstep";
 	}
 
@@ -138,7 +139,7 @@ public class UserController {
 			return "redirect:/user/signup/fourthstep";
 		}
 	}
-	
+
 
 	@GetMapping("/signup/fourthstep")
 	public String signUpFourthStep(UserFourthStep userFourthStep, Model model) {
@@ -157,7 +158,7 @@ public class UserController {
 		model.addAttribute("introductions", introductions);
 		return "user/signUpFourthStep";
 	}
-	
+
 
 	@PostMapping("/signup/fourthstep")
 	public String signUpFourthStep(UserFourthStep userFourthStep, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
@@ -177,38 +178,38 @@ public class UserController {
 		}
 	}
 
-	
+
 	@GetMapping("/signup/laststep")
 	public String signUpLastStep() {
 		return "user/signUpLastStep";
 	}
-	
+
 	@PostMapping("/signup/laststep")
 	public String signUpLastStep(UserLastStep userLastStep, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
 		fileIsNotEmptyCount = 0;
 		List<MultipartFile> files = userLastStep.getFiles();
 		List<String> photoFileNames = new ArrayList<String>();
-		
+
 		files.stream().forEach((file) -> {
 			if (!file.isEmpty()) {
 				fileIsNotEmptyCount +=1;
 			}
 		});
-		
+
 		if(fileIsNotEmptyCount < 2 ) {
 			redirectAttributes.addFlashAttribute("message", "프로필이미지를 2개 이상 골라주세요");
 			return "redirect:/user/signup/laststep";
-		} 
-		
+		}
+
 		for(int i=0; i < files.size(); i++) {
 			String userEmail = String.valueOf(session.getAttribute("userEmail"));
 			String photoFileName = userEmail + "_" + (i+1) + ".jpg";
 			session.setAttribute("photo" + (i+1), photoFileName);
 			logger.info("photo" + (i+1) + ": " + String.valueOf(session.getAttribute("photo" + (i+1))));
-			
+
 			photoFileNames.add(photoFileName);
 		}
-			
+
 		// db에 회원가입 정보 저장
 		User user = User.builder()
 				.userEmail(String.valueOf(session.getAttribute("userEmail")))
@@ -224,19 +225,19 @@ public class UserController {
 				.userHobbies(String.valueOf(session.getAttribute("userHobbies")))
 				.userIntroductions(String.valueOf(session.getAttribute("userIntroductions")))
 				.build();
-		
+
 		// 회원정보 db 저장
 		userService.insertIntoUser(user,String.valueOf(session.getAttribute("userEmail")), photoFileNames);
-		
+
 		// save local
 		for(int i=0; i < files.size(); i++) {
 			String userEmail = String.valueOf(session.getAttribute("userEmail"));
 			String photoFileName = userEmail + "_" + (i+1) + ".jpg";
 			session.setAttribute("photo" + (i+1), photoFileName);
 			logger.info("photo" + (i+1) + ": " + String.valueOf(session.getAttribute("photo" + (i+1))));
-			
+
 			photoFileNames.add(photoFileName);
-			
+
 			MultipartFile file = files.get(i);
 			String savePath = "C:/Users/KOSA/git/Ocean/geumodoIsland/src/main/resources/static/ocean/assets/img/userImg/" + userEmail;
 			try {
@@ -249,61 +250,90 @@ public class UserController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
-		
+
 		// 세션 종료
 		session.invalidate();
-		
+
 		return "redirect:/user/login";
 	}
-	
+
 	// 이메일 중복체크
 	@PostMapping("/signup/emailcheck")
 	public @ResponseBody int emailCheck(@RequestParam("userEmail") String userEmail) {
-		return userService.emailCheck(userEmail);	
+		return userService.emailCheck(userEmail);
 	}
-	
+
 	// 로그인
 	@GetMapping("/login")
 	public String login(UserLogin userLogin) {
 		return "user/login";
 	}
-	
+
+	// 로그인, 로그아웃 처리
+	@PostMapping("/getUserState")
+	public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
+		System.out.println(userState);
+		if (userState.equals("로그인")) {
+			return "로그인";
+		} else {
+			session.invalidate();
+			return "로그아웃";
+		}
+	}
+
 	@PostMapping("/login")
 	public String login(UserLogin userLogin, RedirectAttributes redirectAttributes, HttpSession session) {
 		String userEmail = userLogin.getUserEmail();
-		UserIdAndPassword userIdAndPassword = userService.selectUserPasswordAndUserIdByUserEmail(userEmail);
-		if(passwordEncoder.matches(userLogin.getUserPassword(), userIdAndPassword.getUserPassword())) {
-			if(userIdAndPassword.getUserStatus() == 'A') {
-				session.setAttribute("userId", userIdAndPassword.getUserId());
-				logger.info("userId: " + String.valueOf(session.getAttribute("userId")));
-				return "redirect:/ocean/all";
+		try {
+			UserIdAndPassword userIdAndPassword = userService.selectUserPasswordAndUserIdByUserEmail(userEmail);
+			if(passwordEncoder.matches(userLogin.getUserPassword(), userIdAndPassword.getUserPassword())) {
+				if(userIdAndPassword.getUserStatus() == 'A') {
+					session.setAttribute("userId", userIdAndPassword.getUserId());
+					logger.info("userId: " + String.valueOf(session.getAttribute("userId")));
+					return "redirect:/ocean/all";
+				} else if (userIdAndPassword.getUserStatus() == 'P'){
+					return "redirect:/admin";
+				}
+				else {
+					redirectAttributes.addFlashAttribute("message", "탈퇴된 회원입니다! 다시 로그인해주세요");
+					return "redirect:/user/login";
+				}
 			} else {
-				redirectAttributes.addFlashAttribute("message", "탈퇴된 회원입니다! 다시 로그인해주세요");
+				redirectAttributes.addFlashAttribute("message", "비밀번호가 틀립니다! 다시 로그인해주세요");
 				return "redirect:/user/login";
 			}
-		} else {
+		} catch(NullPointerException e) {
 			redirectAttributes.addFlashAttribute("message", "회원이 아닙니다! 다시 로그인해주세요");
 			return "redirect:/user/login";
 		}
 	}
-	
+
 	// 마이 페이지
-	@GetMapping("/mypage/{userId}")
-	public String myPage(@PathVariable int userId, Model model) {
-		UserProfile userProfile = userService.selectUserProfileByUserId(userId);
-		model.addAttribute("userProfile", userProfile);
-		model.addAttribute("userId", userId);
-		return "user/myPage";
+	@GetMapping("/mypage")
+	public String myPage(Model model, HttpSession session) {
+		String userIdInSession = String.valueOf(session.getAttribute("userId"));
+		System.out.println(userIdInSession);
+
+		if (userIdInSession == "null") {
+			return "redirect:/user/login";
+		} else {
+			int userId = Integer.valueOf(userIdInSession);
+			UserProfile userProfile = userService.selectUserProfileByUserId(userId);
+			model.addAttribute("userProfile", userProfile);
+			model.addAttribute("userId", userId);
+			model.addAttribute("userState", "로그아웃");
+			return "user/myPage";
+		}
 	}
-	
+
 	@GetMapping("/mypage/update/{userId}")
 	public String myPageUpdate(@PathVariable int userId, Model model) {
 		UserProfile userProfile = userService.selectUserProfileByUserId(userId);
 		model.addAttribute("userProfile", userProfile);
 		model.addAttribute("userId", userId);
-		
+
 		List<String> introductions = new ArrayList<>();
 		introductions.add("다정다감");
 		introductions.add("참을성만땅");
@@ -313,11 +343,11 @@ public class UserController {
 		introductions.add("이끌어가는");
 		introductions.add("감성폭발");
 		introductions.add("똑똑이");
-		introductions.add("입답천재");
+		introductions.add("입담천재");
 		introductions.add("긍정에너지");
 		introductions.add("인싸그잡채");
 		model.addAttribute("introductions", introductions);
-		
+
 		List<String> hobbies = new ArrayList<>();
 		hobbies.add("운동");
 		hobbies.add("독서");
@@ -330,56 +360,53 @@ public class UserController {
 		model.addAttribute("hobbies", hobbies);
 		return "user/myPageUpdate";
 	}
-	
+
 	// 비밀번호 찾기
 	@GetMapping("/finduserpassword")
 	public String findUserPassword(String userEmail) {
 		return "user/findPassword";
 	}
-	
+
 	@PostMapping("/finduserpassword")
 	public String findUserPassword(String userEmail, RedirectAttributes redirectAttributes) throws MessagingException {
 		if (userService.selectUserIdByUserEmail(userEmail) == null) {
 			redirectAttributes.addFlashAttribute("message", "가입된 이메일이 아닙니다. 다시 입력해주세요!");
 			return "redirect:/user/finduserpassword";
 		} else {
-			
+
 			String tempPassword = getTempPassword();
 			String encodeTempPassoword = passwordEncoder.encode(tempPassword);
-			
+
 			// 회원 비밀번호 업데이트
 			UserUpdatePassword userUpdatePassword = new UserUpdatePassword();
 			userUpdatePassword.setUserEmail(userEmail);
 			userUpdatePassword.setUserPassword(encodeTempPassoword);
 			userService.updateUserPassword(userUpdatePassword);
-			
-			// 이메일 보내기 
+
+			// 이메일 보내기
 			MimeMessage m = javaMailSender.createMimeMessage();
-	        MimeMessageHelper h = new MimeMessageHelper(m,"UTF-8");
-	        h.setFrom("cjw9977@naver.com");
-	        h.setTo(userEmail);
-	        h.setSubject("[금오도] 임시 비밀번호 발급");
-	        h.setText("임시 비밀번호는 " + tempPassword + " 입니다!");
-	        javaMailSender.send(m);
-	        
-	        redirectAttributes.addFlashAttribute("message", "임시번호가 발급되었습니다! 재로그인 해주세요!");
+			MimeMessageHelper h = new MimeMessageHelper(m,"UTF-8");
+			h.setFrom("cjw9977@naver.com");
+			h.setTo(userEmail);
+			h.setSubject("[금오도] 임시 비밀번호 발급");
+			h.setText("임시 비밀번호는 " + tempPassword + " 입니다!");
+			javaMailSender.send(m);
+
+			redirectAttributes.addFlashAttribute("message", "임시번호가 발급되었습니다! 재로그인 해주세요!");
 		}
 		return "redirect:/user/login";
 	}
-		
+
 	// 임시 비밀번호 만들기
 	private String getTempPassword() {
-		  char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-	                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-	        String str = "";
-	        int idx = 0;
-	        for (int i = 0; i < 10; i++) {
-	            idx = (int) (charSet.length * Math.random());
-	            str += charSet[idx];
-	        }
-	        return str;
+		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+				'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+		String str = "";
+		int idx = 0;
+		for (int i = 0; i < 10; i++) {
+			idx = (int) (charSet.length * Math.random());
+			str += charSet[idx];
+		}
+		return str;
 	}
-
-
 }
-
