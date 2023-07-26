@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.geumodoIsland.admin.dao.IAdminRepository">
+	<!-- 신고 내용 조회 -->
+	<select id="getAllReports" resultType="com.example.geumodoIsland.admin.model.Report">
+      <![CDATA[
+		SELECT report_id AS "reportId", reporter_id AS "reporterId", target_id AS "targetId",
+			   report_content AS "reportContent", report_status AS "reportStatus"
+		FROM report
+		]]>
+   </select>
+
+
+	<!-- 신고 상태 변경 -->
+	<update id="changeReportStatus" parameterType="com.example.geumodoIsland.admin.model.Report">
+        <![CDATA[
+		UPDATE report
+		SET report_status = #{reportStatus}
+		WHERE report_id = #{reportId}
+		]]>
+    </update>
+
+	<!-- 신고 받는 사람 상태 변경 -->
+	<update id="changeTargetStatus" parameterType="int">
+        <![CDATA[
+		UPDATE member
+		SET user_status = 'D'
+		WHERE user_id = #{usertId}
+		]]>
+    </update>
+
+	<!-- 신고 -->
+	<insert id="insertReport" parameterType="com.example.geumodoIsland.admin.model.Report">
+    <![CDATA[
+		INSERT INTO report (report_id, reporter_id, target_id, report_content)
+		VALUES (report_seq.NEXTVAL, #{reporterId}, #{targetId}, #{reportContent,jdbcType=VARCHAR})
+		]]>
+   </insert>
+
+	<!-- 알림 보내기 -->
+	<insert id="insertNotice" parameterType="int">
+    <![CDATA[
+		INSERT INTO report ( report_id, reporter_id, target_id, report_content, created_at, report_status)
+		VALUES (report_seq.NEXTVAL, 10, #{userId}, '프로필 사진 삭제' , sysdate, 'C')
+		]]>
+   </insert>
+
+
+	<!-- photo값 있는 사용자 조회 -->
+	<select id="getAllUsersWithPhotos" resultType="com.example.geumodoIsland.admin.model.UserWithPhoto">
+    <![CDATA[
+		select distinct m.user_id as userId, m.user_email as userEmail, m.user_name as userName
+		from member m, photo p
+		where m.user_id = p.user_id order by m.user_id
+		]]>
+   </select>
+
+
+	<!-- 해당 유저 아이디에 해당하는 모든 사진 조회 -->
+	<select id="getAllUserWithPhotos" parameterType="int" resultType="com.example.geumodoIsland.admin.model.UserPhotos">
+   <![CDATA[
+		select photo_id as photoId, photo_file_name as photoFileName from photo where user_id = #{userId}
+		]]>
+   </select>
+
+
+	<!-- 사진 삭제 -->
+	<delete id="deletePhoto">
+   <![CDATA[
+		DELETE FROM PHOTO WHERE PHOTO_ID = #{photoId}
+		]]>
+   </delete>
+
+
+	<resultMap id="noticeResultMap" type="com.example.geumodoIsland.admin.model.Notice">
+		<id property="noticeId" column="notice_id"/>
+		<result property="userId" column="user_id"/>
+		<result property="noticeContent" column="notice_content"/>
+		<result property="createdAt" column="created_at"/>
+	</resultMap>
+
+	<!-- 알림 내역 -->
+	<select id="getNoticesByTargetId" resultMap="noticeResultMap">
+   <![CDATA[
+		select report_id as notice_id, target_id as user_id, report_content as notice_content, created_at
+		from report
+		where report_status = 'C' and target_id=#{targetId}
+		]]>
+   </select>
+
+
+	<!--
+    <select id="getUserCountByGender" resultType="java.util.Map">
+        SELECT user_sex, COUNT(*) AS user_count FROM member GROUP BY user_sex
+    </select>
+    -->
+
+</mapper>

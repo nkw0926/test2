@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.geumodoIsland.fishing.dao.IFishingRepository">
+    <insert id="insertFishingInfo" parameterType="int">
+        <![CDATA[
+        INSERT INTO fishing
+        VALUES (FISHING_SEQ.NEXTVAL, #{userId}, #{targetUserId}, 'W')
+        ]]>
+    </insert>
+    <select id="seclectRowByUserIdTargetId" parameterType="int">
+        <![CDATA[
+        SELECT count(fishing_id)
+        FROM fishing
+        WHERE fishermen_id = #{userId}
+          and fish_id = #{targetUserId}
+        ]]>
+    </select>
+    <select id="seclectFishingStatus" parameterType="int">
+        <![CDATA[
+        SELECT fishing_status as status
+        FROM fishing
+        WHERE fishermen_id = #{userId}
+          and fish_id = #{targetUserId}
+        ]]>
+    </select>
+
+
+</mapper>

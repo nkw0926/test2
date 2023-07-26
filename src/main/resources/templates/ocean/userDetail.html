@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/include/header :: header}"></head>
+
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<main id="main">
+    <section class="section">
+        <div class="container">
+            <div class="row mb-4 align-items-center">
+                <div class="col-md-6" data-aos="fade-up">
+                    <h2 th:text="${userInfo.userName}"></h2>
+                    <button disabled class="btn btn-light" style="margin-right: 3.2%"
+                            th:each="userIntroduction : ${userIntroductions}" th:text="${userIntroduction}"></button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="site-section pb-0">
+            <div class="container">
+                <div class="row align-items-stretch">
+                    <!-- ======= Testimonials Section ======= -->
+                    <section class="col-md-8" data-aos="fade-up">
+                        <div class="container">
+                            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+                                <div class="swiper-wrapper">
+
+                                    <div class="swiper-slide" th:each="photo : ${userPhotoName}">
+                                        <div class="testimonial-wrap">
+                                            <div class="testimonial">
+                                                <img th:src="@{assets/img/userImg/} + ${userInfo.userId} + @{/} + ${photo.photoFileName} +@{.jpg}"
+                                                     alt="Image" class="img-fluid">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                            <button th:if="${fishingState} == 'W'" type="button" class="btn btn-secondary btn-lg"
+                                    style="margin:auto;
+        display:block;" disabled>물고기의 입질을 기다리고 있습니다!
+                            </button>
+                        </div>
+                    </section><!-- End Testimonials Section -->
+
+                    <div class="col-md-3 ml-auto" data-aos="fade-up" data-aos-delay="100">
+                        <div class="sticky-content">
+                            <h3 class="h3" th:text="${userInfo.userJob}">Boxed Water</h3>
+                            <br>
+                            <!--                            <p class="mb-4"><span class="text-muted" th:text="${userInfo.userJob}"></span></p>-->
+
+                            <h4 class="h4 mb-3"><b>Profile</b></h4>
+                            <ul class="list-unstyled list-line mb-5">
+                                <li th:text="${userInfo.userAge} + ' age'"></li>
+                                <li th:text="${userInfo.userAddress}"></li>
+                                <li th:text="${userInfo.userHeight} + ' cm'"></li>
+                                <li th:text="${userInfo.userBody}"></li>
+                            </ul>
+                            <h4 class="h4 mb-3"><b>What I Like</b></h4>
+
+                            <ul class="list-unstyled list-line mb-5">
+                                <li th:each="userHobby : ${userHobbies}" th:text="${userHobby}"></li>
+                            </ul>
+
+                            <p th:if="${isInAqua} != 0"><a href="#" class="readmore" onclick="freeFish()">물고기 수족관에서
+                                방생</a></p>
+                            <p th:if="${isInAqua} == 0"><a href="#" class="readmore" onclick="addAquarium()">수족관에
+                                담기❤️</a></p>
+                            <p th:if="${isThrowBait} == 0"><a href="#" class="readmore" onclick="minusbait()">미끼 던지기</a>
+                            </p>
+
+                            <!-- 세인 잠시 테스트 해볼게요 -->
+                            <!-- '신고하기' 버튼 -->
+                            <!--<p><a href="/admin/submit" th:href="@{'/admin/submit?targetId=' + userInfo.userId}" class="readmore">신고하기</a></p> -->
+                            <p><a th:href="@{/admin/submit(targetId=${userInfo.userId})}" class="readmore">신고하기⚠</a></p>
+                            <!-- 세인 여기까지 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer class="footer" role="contentinfo">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="mb-1">&copy; Copyright MyPortfolio. All Rights Reserved</p>
+                <div class="credits">
+                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                </div>
+            </div>
+            <div class="col-sm-6 social text-md-end">
+                <a href="#"><span class="bi bi-twitter"></span></a>
+                <a href="#"><span class="bi bi-facebook"></span></a>
+                <a href="#"><span class="bi bi-instagram"></span></a>
+                <a href="#"><span class="bi bi-linkedin"></span></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="assets/vendor/aos/aos.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function freeFish() {
+        if (!confirm('물고기를 방생할까요?')) {
+            return false;
+        }
+
+        var loginUserId = /*[[${loginUserId}]]*/;
+        const formHtml = `
+                    <form id="freeFhisForm" action="/ocean/freeFishInAqua" method="post">
+                        <input  id="loginUserId" name="loginUserId" value= [[${loginUserId}]] />
+                        <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
+                    </form>`;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('freeFhisForm').submit();
+
+    }
+
+    function minusbait() {
+        if (!confirm('미끼를 던질까요?')) {
+            return false;
+        }
+        var targetUserId = /*[[${userInfo.userId}]]*/;
+        var loginUserId = /*[[${loginUserId}]]*/;
+        const formHtml = `
+                    <form id="minusBaitForm" action="/ocean/minusBait" method="post">
+                        <input  id="loginUserId" name="loginUserId" value= [[${loginUserId}]] />
+
+                        <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
+                    </form>`;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('minusBaitForm').submit();
+        console.log("미끼던짐");
+    }
+
+    function addAquarium() {
+        if (!confirm('물고기를 수족관에 담을까요?')) {
+            return false;
+        }
+        var targetUserId = /*[[${userInfo.userId}]]*/;
+        var loginUserId = /*[[${loginUserId}]]*/;
+        const formHtml = `
+                    <form id="addAquariumForm" action="/aquarium/addAquarium" method="post">
+                        <input  id="loginUserId" name="loginUserId" value= [[${loginUserId}]] />
+
+                        <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
+                    </form>`;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('addAquariumForm').submit();
+        console.log("수족관에 넣음");
+    }
+
+    /*]]>*/
+
+</script>
+
+</body>
+
+</html>
