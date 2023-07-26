@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface IOceanRepository {
     List<User> selectFishListByLocal(@Param("userId") int userId);
-    int selectCountAllBait(@Param("userId") int loginUserId);
+    Object selectCountAllBait(@Param("userId") int loginUserId);
     int selectCountFreeBait(@Param("userId") int loginUserId);
     int selectCountNotFreeBait(@Param("userId") int loginUserId);
     void minusNotFreeBait(@Param("userId") int loginUserId);

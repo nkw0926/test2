@@ -177,8 +177,13 @@ public class OceanController {
     public String minusBait(@RequestParam int loginUserId, @RequestParam int targetUserId, Model model) {
         // 해당 유저 가용 미끼 있는지 확인
 
-
-        if ((Integer) (oceanService.selectCountAllBait(loginUserId)) != null && oceanService.selectCountAllBait(loginUserId) > 0 && fishingService.seclectRowByUserIdTargetId(loginUserId, targetUserId) == 0) {
+        if (oceanService.selectCountAllBait(loginUserId) == null || (Integer)oceanService.selectCountAllBait(loginUserId) <= 0) {
+            // 가용 미끼 없으면?
+            // 가용 미끼가 존재하지 않습니다!
+            model.addAttribute("message", "가용 미끼가 존재하지 않습니다!");
+            model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
+            return "ocean/message";}
+        else if ( (oceanService.selectCountAllBait(loginUserId)) != null && (Integer) oceanService.selectCountAllBait(loginUserId) > 0 && fishingService.seclectRowByUserIdTargetId(loginUserId, targetUserId) == 0) {
             // 가용 미끼가 있으면  무료 미끼 먼저 소진
             //무료 미끼 있냐?
             if (oceanService.selectCountFreeBait(loginUserId) > 0) {
@@ -194,12 +199,7 @@ public class OceanController {
             model.addAttribute("message", "미끼를 성공적으로 던졌습니다! \n 물고기의 반응을 기다려주세요!");
             model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
             return "ocean/message";
-        } else if (oceanService.selectCountAllBait(loginUserId) <= 0) {
-            // 가용 미끼 없으면?
-            // 가용 미끼가 존재하지 않습니다!
-            model.addAttribute("message", "가용 미끼가 존재하지 않습니다!");
-            model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
-            return "ocean/message";
+
         } else if (fishingService.seclectRowByUserIdTargetId(loginUserId, targetUserId) != 0) {
             //이미 그 물고기에게 미끼를 던졌으면?
             model.addAttribute("message", "해당 유저에게 미끼를 던진 과거 기록이 있습니다!");

@@ -8,7 +8,7 @@ import java.util.List;
 public interface IOceanService {
     List<User> selectFishListByLocal(int userId);
 
-    int selectCountAllBait(int loginUserId);
+    Object selectCountAllBait(int loginUserId);
 
     int selectCountFreeBait(int loginUserId);
 
