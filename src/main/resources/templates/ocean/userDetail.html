@@ -29,7 +29,7 @@
                                     <div class="swiper-slide" th:each="photo : ${userPhotoName}">
                                         <div class="testimonial-wrap">
                                             <div class="testimonial">
-                                                <img th:src="@{assets/img/userImg/} + ${userInfo.userId} + @{/} + ${photo.photoFileName} +@{.jpg}"
+                                                <img th:src="@{assets/img/userImg/} + ${userInfo.userEmail} + @{/} + ${photo.photoFileName}"
                                                      alt="Image" class="img-fluid">
                                             </div>
                                         </div>

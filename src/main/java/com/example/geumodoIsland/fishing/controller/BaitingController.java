@@ -44,6 +44,7 @@ public class BaitingController {
 
 			model.addAttribute("baitingList", baitingList);
 			model.addAttribute("baitedList", baitedList);
+			model.addAttribute("userState", "로그아웃");
 			return "fishing/baitingList";
 		}
 	}

@@ -22,7 +22,7 @@ public class OceanService implements IOceanService {
     }
 
     @Override
-    public int selectCountAllBait(int loginUserId) {
+    public Object selectCountAllBait(int loginUserId) {
         return oceanRepository.selectCountAllBait(loginUserId);
     }
 

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head th:replace="~{/include/header :: header}">
 </head>
 <body>
+<div id="body-wrapper" style="height: 100vh">
+    <div id="body-content" style="height: auto; min-height: 100%; padding-bottom: 90px">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"/>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
-<div id="pad">
     <main id="main">
         <section class="section site-portfolio">
             <div class="container">
@@ -124,10 +125,12 @@
             </div>
         </section>
     </main>
-</div>
+
 <br>
+    </div>
 <footer th:replace="~{/include/footer :: footer}"></footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
 <script src="https://cdnjs./cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
         crossorigin="anonymous"></script>
