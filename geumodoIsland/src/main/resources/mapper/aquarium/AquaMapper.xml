@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.geumodoIsland.aquarium.dao.IAquaRepository">
+    <select id="selectFishList" parameterType="hashmap" resultType="com.example.geumodoIsland.aquarium.model.Aquarium">
+	<![CDATA[
+        SELECT aquarium_id  AS "aquariumId",
+               fishermen_id AS "fishermenId",
+               fish_id      AS "fishId"
+        FROM aquarium
+        ]]>
+	</select>
+
+
+    <select id="selectRowByUserIdTargetId" parameterType="int">
+        <![CDATA[
+        SELECT count(aquarium_id)
+        FROM aquarium
+        WHERE FISHERMEN_ID = #{userId}
+          and fish_id = #{targetUserId}
+        ]]>
+    </select>
+
+    <insert id="insertAquarium" parameterType="int">
+        <![CDATA[
+        INSERT INTO aquarium
+        VALUES (AQUA_SEQ.NEXTVAL, #{userId}, #{targetUserId})
+        ]]>
+    </insert>
+    <delete id="deleteAqua" parameterType="int">
+        <![CDATA[
+        DELETE
+        FROM aquarium
+        WHERE fishermen_id = #{userId}
+          and fish_id = #{targetUserId}
+        ]]>
+    </delete>
+</mapper>
