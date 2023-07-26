@@ -25,17 +25,10 @@ public class AdminController {
     IUserService userService;
     private final IAdminService adminService;
 
-
     @Autowired
     public AdminController(IAdminService adminService) {
         this.adminService = adminService;
     }
-
-    @GetMapping("/admin")
-    public String adminMain(Model model) {
-        return "admin/admin-main";
-    }
-
 
     @GetMapping("/reports")
     public String getAllReports(Model model) {
@@ -45,7 +38,6 @@ public class AdminController {
                 .sorted(Comparator.comparingInt(Report::getReportId))
                 .collect(Collectors.toList());
         model.addAttribute("reports", reports);
-//        return "admin/admin-reports";
         return "admin/r-test";
     }
 
@@ -56,18 +48,50 @@ public class AdminController {
         return "redirect:/admin/reports";
     }
 
+//    @GetMapping("/submit")
+//    public String showSubmitPage(@RequestParam("targetId") int targetId, Model model) {
+//        // targetId 값을 model에 추가하여 submit.html 페이지로 전달
+//        List<String> reportContents = new ArrayList<>();
+//        reportContents.add("부적절한 언어 사용으로 신고");
+//        reportContents.add("스팸 또는 광고 무단 게시로 신고");
+//        reportContents.add("허위 정보 게시로 신고");
+//        reportContents.add("사기 또는 부정 행위로 신고");
+//        reportContents.add("저작권 위반으로 신고");
+//        reportContents.add("명예 훼손 및 비방으로 신고");
+//        reportContents.add("다른 사용자의 개인정보 노출로 신고");
+//        reportContents.add("불법적인 활동 진행으로 신고");
+//        model.addAttribute("reportContents", reportContents);
+//        return "admin/s-test";
+//    }
+//
+//    @RequestMapping(value="/submit", method=RequestMethod.POST)
+//    public String submitReport(@RequestParam("targetId") int targetId, String reportContent,
+//                               HttpSession session,  Model model, RedirectAttributes redirectAttributes) {
+//        if(reportContent == null) {
+//            redirectAttributes.addFlashAttribute("message", "신고 사유를 선택해주세요!");
+//            return "redirect:/admin/submit?targetId=" + targetId;
+//        } else {
+//            int reporterId = (int) session.getAttribute("userId");
+//            // targetId, reporterId, reportContent를 사용하여 신고 기능 처리
+//            adminService.insertReport(targetId, reporterId, reportContent);
+//            model.addAttribute("message", "신고가 완료되었습니다.");
+//            model.addAttribute("searchUrl","/ocean/all");
+//            return "/admin/message";
+//        }
+//    }
+
     @GetMapping("/submit")
-    public String showSubmitPage(@RequestParam("targetId") int targetId, Model model) {
-        // targetId 값을 model에 추가하여 submit.html 페이지로 전달
-        List<String> reportContents = new ArrayList<>();
-        reportContents.add("부적절한 언어 사용으로 신고");
-        reportContents.add("스팸 또는 광고 무단 게시로 신고");
-        reportContents.add("허위 정보 게시로 신고");
-        reportContents.add("사기 또는 부정 행위로 신고");
-        reportContents.add("저작권 위반으로 신고");
-        reportContents.add("명예 훼손 및 비방으로 신고");
-        reportContents.add("다른 사용자의 개인정보 노출로 신고");
-        reportContents.add("불법적인 활동 진행으로 신고");
+    public String showSubmitPage(@RequestParam("targetId") int targetId, Model model) { 
+    	// targetId 값을 model에 추가하여 submit.html 페이지로 전달
+    	List<String> reportContents = new ArrayList<>();
+    	reportContents.add("부적절한 언어 사용으로 신고");
+    	reportContents.add("스팸 또는 광고 무단 게시로 신고");
+    	reportContents.add("허위 정보 게시로 신고");
+    	reportContents.add("사기 또는 부정 행위로 신고");
+    	reportContents.add("저작권 위반으로 신고");
+    	reportContents.add("명예 훼손 및 비방으로 신고");
+    	reportContents.add("다른 사용자의 개인정보 노출로 신고");
+    	reportContents.add("불법적인 활동 진행으로 신고");
         model.addAttribute("reportContents", reportContents);
         model.addAttribute("targetId", targetId);
 //        return "admin/submit";
@@ -77,21 +101,21 @@ public class AdminController {
     @RequestMapping(value="/submit", method=RequestMethod.POST)
     public String submitReport(@RequestParam("targetId") int targetId, String reportContent,
                                HttpSession session,  Model model, RedirectAttributes redirectAttributes) {
-        if(reportContent == null) {
-            redirectAttributes.addFlashAttribute("message", "신고 사유를 선택해주세요!");
-            return "redirect:/admin/submit?targetId=" + targetId;
-        } else {
-            int reporterId = (int) session.getAttribute("userId"); //나중에 이걸로!!
-//             int reporterId = 10; //임시로 지정
-            // targetId, reporterId, reportContent를 사용하여 신고 기능 처리
-            adminService.insertReport(targetId, reporterId, reportContent);
-            model.addAttribute("message", "신고가 완료되었습니다.");
-            model.addAttribute("searchUrl","/ocean/all");
-
-            return "/admin/message";
-        }
+    	if(reportContent == null) {
+    		redirectAttributes.addFlashAttribute("message", "신고 사유를 선택해주세요!");
+    		return "redirect:/admin/submit?targetId=" + targetId;
+    	} else {
+           int reporterId = (int) session.getAttribute("userId"); //나중에 이걸로!!
+//       	   int reporterId = 10; //임시로 지정
+           // targetId, reporterId, reportContent를 사용하여 신고 기능 처리
+           adminService.insertReport(targetId, reporterId, reportContent);
+           model.addAttribute("message", "신고가 완료되었습니다.");
+           model.addAttribute("searchUrl","/ocean/all");
+           
+           return "/admin/message";
+    	}
     }
-
+    
     @GetMapping("/photos")
     public String getAllUsersWithPhotos(Model model) {
         List<UserWithPhoto> allUsersWithPhotos = adminService.getAllUsersWithPhotos();
@@ -109,7 +133,6 @@ public class AdminController {
         });
 
         model.addAttribute("allUsersWithPhotosFinal", allUsersWithPhotosFinal);
-//        return "admin/admin-user-photos";
         return "admin/p-test";
     }
 
@@ -122,26 +145,13 @@ public class AdminController {
 
     @GetMapping("/notices")
     public String getNoticesForUser(Model model, HttpSession session) {
-        int userId = (int) session.getAttribute("userId"); //나중에 이걸로!!
-//       int userId = 2; //임시로 지정
+        int userId = (int) session.getAttribute("userId"); 
         List<Notice> notices = adminService.getNoticesByUserId(userId);
         Collections.sort(notices, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt())); //정렬
         adminService.setReportCreatedAtForNotices(notices); //reportCreatedAt 값을 notice의 createdAt으로 설정
         model.addAttribute("notices", notices);
-//        return "admin/admin-notices";
         return "admin/n-test";
     }
-
-
-//@GetMapping("/charts")
-//public String getUsers(Model model) {
-//    // 성별에 따른 사용자 수 가져오기
-//    List<Map<String, Object>> genderCounts = adminService.getUserCountByGender();
-//    System.out.println(genderCounts);
-//    model.addAttribute("genderCounts", genderCounts);
-////        return "admin/user-charts";
-//    return "admin/c-test";
-//}
 
     @GetMapping("/hesu/charts")
     public String getUsersCharts(Model model) {
@@ -149,7 +159,6 @@ public class AdminController {
         model.addAttribute("allUser", allUserList);
         return "admin/main";
     }
-
 
     @GetMapping("/agerange/pieChart")
     @ResponseBody
@@ -291,5 +300,4 @@ public class AdminController {
         return sexCountList;
     }
 }
-
 

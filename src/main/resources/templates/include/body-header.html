@@ -30,10 +30,10 @@
           <div class="navbar">
             <div class="logo"><a href="/ocean/all">금오도</a></div>
             <ul class="links">
-                <li><a href="/ocean/all">바다</a></li>
-                <li><a href="/fishing/baitingList">낚시 스토리</a></li>
-                <li><a href="">마이페이지</a></li>
-                <li><a href="/admin/notices">신고 알림</a></li>
+                 <li><a th:href="@{/ocean/all}">바다</a></li>
+                <li><a th:href="@{/baiting}">낚시 스토리</a></li>
+                <li><a th:href="@{/user/mypage}">마이페이지</a></li>
+                <li><a th:href="@{/admin/notices}">신고 알림</a></li>
             </ul>
             <div class="action_btn" onclick="changeMessage()">[[${userState}]]</div>
             <div class="toggle_btn">
@@ -42,10 +42,10 @@
         </div>
 
         <div class="dropdown_menu">
-            <li><a href="/ocean/all">바다</a></li>
-            <li><a href="/fishing/baitingList">낚시 스토리</a></li>
-            <li><a href="">마이페이지</a></li>
-            <li><a href="/admin/notices">신고 알림</a></li>
+          <li><a th:href="@{/ocean/all}">바다</a></li>
+            <li><a th:href="@{/baiting}">낚시 스토리</a></li>
+            <li><a th:href="@{/user/mypage}">마이페이지</a></li>
+            <li><a th:href="@{/admin/notices}">신고 알림</a></li>
             <li><div class="action_btn" onclick="changeMessage()">[[${userState}]]</div></li>
         </div>
     </header>
