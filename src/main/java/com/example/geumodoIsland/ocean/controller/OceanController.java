@@ -35,59 +35,59 @@ public class OceanController {
     IAquaService aquaService;
 
     @GetMapping(value = "/all")
-    public String getAllFishListForFishing(Model model,HttpSession session, RedirectAttributes redirectAttributes) {
-    	String userIdInSession = String.valueOf(session.getAttribute("userId"));
+    public String getAllFishListForFishing(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        String userIdInSession = String.valueOf(session.getAttribute("userId"));
 
-    	if (userIdInSession == "null") {
-    		redirectAttributes.addFlashAttribute("userState", "로그인");
-    		return "redirect:/user/login";
-    	} else {
-    		   int userId = Integer.valueOf(userIdInSession);
-    	       Map<String, Object> loginUserInfo = userService.selectAUserInfo(userId);
-    	       User userInfoMap = (User) loginUserInfo.get("userInfo");
+        if (userIdInSession == "null") {
+            redirectAttributes.addFlashAttribute("userState", "로그인");
+            return "redirect:/user/login";
+        } else {
+            int userId = Integer.valueOf(userIdInSession);
+            Map<String, Object> loginUserInfo = userService.selectAUserInfo(userId);
+            User userInfoMap = (User) loginUserInfo.get("userInfo");
 
-    	       String loginUserName = userInfoMap.getUserName();
-    	       String loginUserAddress = userInfoMap.getUserAddress();
-    	       char loginUserSex = userInfoMap.getUserSex();
+            String loginUserName = userInfoMap.getUserName();
+            String loginUserAddress = userInfoMap.getUserAddress();
+            char loginUserSex = userInfoMap.getUserSex();
 
-    	       List<User> userList = userService.selectFishListByAddress(loginUserAddress, loginUserSex, userId);
-    	       model.addAttribute("loginUserName", loginUserName);
+            List<User> userList = userService.selectFishListByAddress(loginUserAddress, loginUserSex, userId);
+            model.addAttribute("loginUserName", loginUserName);
 
-    	       Date now = new Date();
-    	       SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
-    	       String formatedNow = formatter.format(now);
-    	       for (int i = 0; i < userList.size(); i++) {
-    	           int userBornYear = userList.get(i).getUserAge();
-    	           int userAgeThisYear = (Integer.parseInt(formatedNow) - userBornYear);
-    	           userList.get(i).setUserAge(userAgeThisYear);
-    	       }
-    	       model.addAttribute("userList", userList);
-    	       model.addAttribute("userState", "로그아웃");
+            Date now = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+            String formatedNow = formatter.format(now);
+            for (int i = 0; i < userList.size(); i++) {
+                int userBornYear = userList.get(i).getUserAge();
+                int userAgeThisYear = (Integer.parseInt(formatedNow) - userBornYear);
+                userList.get(i).setUserAge(userAgeThisYear);
+            }
+            model.addAttribute("userList", userList);
+            model.addAttribute("userState", "로그아웃");
 
-    	       oceanService.resetFreeBait();
+            oceanService.resetFreeBait();
 
-               return "ocean/oceanMain";
-    	}
+            return "ocean/oceanMain";
+        }
     }
 
     // 로그인, 로그아웃 처리
- 	@PostMapping("/getUserState")
- 	public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
- 		System.out.println(userState);
- 		if (userState.equals("로그인")) {
- 			return "로그인";
- 		} else {
- 			session.invalidate();
- 			return "로그아웃";
- 		}
- 	}
+    @PostMapping("/getUserState")
+    public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
+        System.out.println(userState);
+        if (userState.equals("로그인")) {
+            return "로그인";
+        } else {
+            session.invalidate();
+            return "로그아웃";
+        }
+    }
 
     @PostMapping(value = "/selectCondition")
-    public ResponseEntity<List<User>> getFishListByCondition(@RequestBody Map<String, Object> selectCondotionMap, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<List<User>> getFishListByCondition(@RequestBody Map<String, Object> selectCondotionMap, Model model, HttpSession session) {
 
         String userIdInSession = String.valueOf(session.getAttribute("userId"));
 
-        char  loginUserSex = userService.selectUserProfileByUserId(Integer.parseInt(userIdInSession)).getUserSex() ;
+        char loginUserSex = userService.selectUserProfileByUserId(Integer.parseInt(userIdInSession)).getUserSex();
 
 
         // JSON 데이터를 자바 Map으로
@@ -174,33 +174,43 @@ public class OceanController {
 
     //이거 service로 보내고 transactional 달아야하는데,,,
     @PostMapping("/minusBait")
-    public String minusBait(@RequestParam int loginUserId, @RequestParam int targetUserId, Model model) {
+    public String minusBait( @RequestParam int targetUserId, Model model, HttpSession session) {
         // 해당 유저 가용 미끼 있는지 확인
+        int userIdInSession = (int) session.getAttribute("userId");
 
-        if (oceanService.selectCountAllBait(loginUserId) == null || (Integer)oceanService.selectCountAllBait(loginUserId) <= 0) {
+        System.out.println("ssssss");
+
+
+
+        if (oceanService.selectCountAllBait(userIdInSession) == null) {
             // 가용 미끼 없으면?
             // 가용 미끼가 존재하지 않습니다!
             model.addAttribute("message", "가용 미끼가 존재하지 않습니다!");
             model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
-            return "ocean/message";}
-        else if ( (oceanService.selectCountAllBait(loginUserId)) != null && (Integer) oceanService.selectCountAllBait(loginUserId) > 0 && fishingService.seclectRowByUserIdTargetId(loginUserId, targetUserId) == 0) {
+            return "ocean/message";
+        } else if (  oceanService.selectCountAllBait(userIdInSession).equals(0) ) {
+            model.addAttribute("message", "가용 미끼가 존재하지 않습니다!");
+            model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
+            return "ocean/message";
+
+        } else if (oceanService.selectCountAllBait(userIdInSession) != null && Integer.parseInt(oceanService.selectCountAllBait(userIdInSession).toString()) > 0 && fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId) == 0) {
             // 가용 미끼가 있으면  무료 미끼 먼저 소진
             //무료 미끼 있냐?
-            if (oceanService.selectCountFreeBait(loginUserId) > 0) {
+            if (oceanService.selectCountFreeBait(userIdInSession) > 0) {
                 // 무료 미끼 있으면
                 // 무료미끼 하나 삭제
-                oceanService.minusFreeBait(loginUserId);
+                oceanService.minusFreeBait(userIdInSession);
             } else {
                 // 무료미끼 없으면 유료미끼 하나 삭제
-                oceanService.minusNotFreeBait(loginUserId);
+                oceanService.minusNotFreeBait(userIdInSession);
             }
             // 그 낚시 테이블에 정보 기록
-            fishingService.insertFishingInfo(loginUserId, targetUserId);
+            fishingService.insertFishingInfo(userIdInSession, targetUserId);
             model.addAttribute("message", "미끼를 성공적으로 던졌습니다! \n 물고기의 반응을 기다려주세요!");
             model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
             return "ocean/message";
 
-        } else if (fishingService.seclectRowByUserIdTargetId(loginUserId, targetUserId) != 0) {
+        } else if (fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId) != 0) {
             //이미 그 물고기에게 미끼를 던졌으면?
             model.addAttribute("message", "해당 유저에게 미끼를 던진 과거 기록이 있습니다!");
             model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);

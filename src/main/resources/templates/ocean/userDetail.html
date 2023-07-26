@@ -127,10 +127,10 @@
             return false;
         }
 
-        var loginUserId = /*[[${loginUserId}]]*/;
+
         const formHtml = `
                     <form id="freeFhisForm" action="/ocean/freeFishInAqua" method="post">
-                        <input  id="loginUserId" name="loginUserId" value= [[${loginUserId}]] />
+
                         <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
                     </form>`;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -146,10 +146,10 @@
             return false;
         }
         var targetUserId = /*[[${userInfo.userId}]]*/;
-        var loginUserId = /*[[${loginUserId}]]*/;
+
         const formHtml = `
                     <form id="minusBaitForm" action="/ocean/minusBait" method="post">
-                        <input  id="loginUserId" name="loginUserId" value= [[${loginUserId}]] />
+
 
                         <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
                     </form>`;
@@ -166,10 +166,10 @@
             return false;
         }
         var targetUserId = /*[[${userInfo.userId}]]*/;
-        var loginUserId = /*[[${loginUserId}]]*/;
+
         const formHtml = `
                     <form id="addAquariumForm" action="/aquarium/addAquarium" method="post">
-                        <input  id="loginUserId" name="loginUserId" value= [[${loginUserId}]] />
+
 
                         <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
                     </form>`;
