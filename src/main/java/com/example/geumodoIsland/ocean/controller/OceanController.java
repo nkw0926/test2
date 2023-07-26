@@ -86,7 +86,9 @@ public class OceanController {
     public ResponseEntity<List<User>> getFishListByCondition(@RequestBody Map<String, Object> selectCondotionMap, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 
         String userIdInSession = String.valueOf(session.getAttribute("userId"));
-        char  userSexInSession = (char) session.getAttribute("userSex");
+
+        char  loginUserSex = userService.selectUserProfileByUserId(Integer.parseInt(userIdInSession)).getUserSex() ;
+
 
         // JSON 데이터를 자바 Map으로
         List<String> locationList = (List<String>) selectCondotionMap.get("locationList");
@@ -110,7 +112,7 @@ public class OceanController {
 
         List<String> hobbyList = (List<String>) selectCondotionMap.get("hobbyList");
         List<String> personalityList = (List<String>) selectCondotionMap.get("personalityList");
-        List<User> conditionUserList = userService.selectFishListByCondition(Integer.parseInt(userIdInSession), userSexInSession, locationList, bornYearList, hobbyList, personalityList);
+        List<User> conditionUserList = userService.selectFishListByCondition(Integer.parseInt(userIdInSession), loginUserSex, locationList, bornYearList, hobbyList, personalityList);
 
         model.addAttribute("loginUserName", "뽑아라");
         model.addAttribute("userList", conditionUserList);
