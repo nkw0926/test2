@@ -9,21 +9,23 @@
         <div class="col-lg-12">
 
             <div class="card">
-                <div class="card-body" style="width:1300px">
+                <div class="card-body" style="width:1000px">
                     <h5 class="card-title">Notice</h5>
                     <!-- Default Table -->
                     <table class="table">
                         <thead>
                         <tr style="display: flex">
-                            <th scope="col" style="flex-grow:0">#</th>
                             <th scope="col" style="flex-grow:1">알림 내용</th>
                             <th scope="col" style="flex-grow:1">알림 일시</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="notice, rowStat : ${notices}" style="display: flex">
-                            <th scope="row" th:text="${rowStat.count}" style="flex-grow:0">1</th>
-                            <td style="text-align:left; flex-grow:1"> <span th:utext="${notice.noticeContent + ' 처리가 되셨음을 알려드립니다.'}"></span></td>
+                        <tr th:each="notice, rowStat : ${notice1}" style="display: flex">
+                            <td style="text-align:left; flex-grow:1"> <span th:utext="${notice.noticeContent + '됨을 알립니다.'}"></span></td>
+                            <td style="text-align:left; flex-grow:1" th:text="${notice.createdAt}"></td>
+                        </tr>
+                        <tr th:each="notice, rowStat : ${notice2}" style="display: flex">
+                            <td style="text-align:left; flex-grow:1"> <span th:utext="${notice.noticeContent + ' 접수가 완료되었습니다.'}"></span></td>
                             <td style="text-align:left; flex-grow:1" th:text="${notice.createdAt}"></td>
                         </tr>
                         </tbody>

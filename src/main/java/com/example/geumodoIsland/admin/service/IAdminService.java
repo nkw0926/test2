@@ -19,10 +19,10 @@ public interface IAdminService {
     void deletePhoto(int photoId, int userId);
 
     List<Notice> getNoticesByUserId(int userId);
+    List<Notice> getNoticesByReportId(int userId);
     void saveNoticeFromReport(Report report);
     void setReportCreatedAtForNotices(List<Notice> notices);
-//    List<Map<String, Object>> getUserCountByGender();
-//    List<Map<String, Object>> getUserCountByGender();
+
 }
 
 

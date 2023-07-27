@@ -10,7 +10,6 @@
    	 	]]>
 	</select>
 
-
     <!-- 신고 상태 변경 -->
     <update id="changeReportStatus" parameterType="com.example.geumodoIsland.admin.model.Report">
         <![CDATA[
@@ -41,11 +40,28 @@
 	<insert id="insertNotice" parameterType="int">
 	 <![CDATA[
 	    INSERT INTO report ( report_id, reporter_id, target_id, report_content, created_at, report_status)
-	    VALUES (report_seq.NEXTVAL, #{reporterId}, #{userId}, '프로필 사진 삭제' , sysdate, 'C')
+	    VALUES (report_seq.NEXTVAL, 0, #{userId}, '프로필 사진이 삭제' , sysdate, 'C')
 	     ]]>
 	</insert>
 
+	<!-- 알림 내역 -->
+	<select id="getNoticesByReportId" resultMap="noticeResultMap">
+	<![CDATA[
+		select report_id as notice_id, reporter_id as user_id, report_content as notice_content, created_at 
+		from report 
+		where report_status = 'C' and reporter_id=#{targetId}
+	     ]]>
+	</select>
 
+	<!-- 알림 내역 -->
+	<select id="getNoticesByTargetId" resultMap="noticeResultMap">
+	<![CDATA[
+		select report_id as notice_id, target_id as user_id, report_content as notice_content, created_at 
+		from report 
+		where report_status = 'C' and target_id=#{targetId}
+	     ]]>
+	</select>
+	
 	<!-- photo값 있는 사용자 조회 -->
 	<select id="getAllUsersWithPhotos" resultType="com.example.geumodoIsland.admin.model.UserWithPhoto">
 	 <![CDATA[
@@ -79,21 +95,6 @@
 	    <result property="createdAt" column="created_at"/>
 	</resultMap>
 	
-	<!-- 알림 내역 -->
-	<select id="getNoticesByTargetId" resultMap="noticeResultMap">
-	<![CDATA[
-		select report_id as notice_id, reporter_id as user_id, report_content as notice_content, created_at 
-		from report 
-		where report_status = 'C' and reporter_id=#{targetId}
-	     ]]>
-	</select>
 
-
-	<!-- 
-	<select id="getUserCountByGender" resultType="java.util.Map">
-	    SELECT user_sex, COUNT(*) AS user_count FROM member GROUP BY user_sex
-	</select>
-	-->
- 
 </mapper>
 
