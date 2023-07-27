@@ -57,14 +57,14 @@ public class AdminController {
     public String showSubmitPage(@RequestParam("targetId") int targetId, Model model) {
         // targetId 값을 model에 추가하여 submit.html 페이지로 전달
         List<String> reportContents = new ArrayList<>();
-        reportContents.add("부적절한 언어 사용으로 신고");
-        reportContents.add("스팸 또는 광고 무단 게시로 신고");
-        reportContents.add("허위 정보 게시로 신고");
-        reportContents.add("사기 또는 부정 행위로 신고");
-        reportContents.add("저작권 위반으로 신고");
-        reportContents.add("명예 훼손 및 비방으로 신고");
-        reportContents.add("다른 사용자의 개인정보 노출로 신고");
-        reportContents.add("불법적인 활동 진행으로 신고");
+        reportContents.add("부적절한 언어 사용");
+        reportContents.add("스팸 또는 광고 무단 게시");
+        reportContents.add("허위 정보 게시");
+        reportContents.add("사기 또는 부정 행위");
+        reportContents.add("저작권 위반");
+        reportContents.add("명예 훼손 및 비방");
+        reportContents.add("다른 사용자의 개인정보 노출");
+        reportContents.add("불법적인 활동 진행 및 불법 콘텐츠 게시");
         model.addAttribute("reportContents", reportContents);
         model.addAttribute("targetId", targetId);
         model.addAttribute("userState", "로그아웃");

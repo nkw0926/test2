@@ -25,7 +25,7 @@
                             <td style="text-align:left; flex-grow:1" th:text="${notice.createdAt}"></td>
                         </tr>
                         <tr th:each="notice, rowStat : ${notice2}" style="display: flex">
-                            <td style="text-align:left; flex-grow:1"> <span th:utext="${notice.noticeContent + ' 접수가 완료되었습니다.'}"></span></td>
+                            <td style="text-align:left; flex-grow:1"> <span th:utext="${notice.noticeContent + ' 에 관한 신고 접수가 완료되었습니다.'}"></span></td>
                             <td style="text-align:left; flex-grow:1" th:text="${notice.createdAt}"></td>
                         </tr>
                         </tbody>
