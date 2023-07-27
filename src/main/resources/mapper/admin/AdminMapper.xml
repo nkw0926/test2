@@ -82,9 +82,9 @@
 	<!-- 알림 내역 -->
 	<select id="getNoticesByTargetId" resultMap="noticeResultMap">
 	<![CDATA[
-		select report_id as notice_id, target_id as user_id, report_content as notice_content, created_at 
+		select report_id as notice_id, reporter_id as user_id, report_content as notice_content, created_at 
 		from report 
-		where report_status = 'C' and target_id=#{targetId}
+		where report_status = 'C' and reporter_id=#{targetId}
 	     ]]>
 	</select>
 
