@@ -1,0 +1,16 @@
+//aquarium ���̺� insert��
+INSERT INTO aquarium(aquarium_id, fishermen_id, fish_id)
+    VALUES(aqua_seq.nextval, 3, 1);
+    
+//member ���̺� insert��
+INSERT INTO member(user_id, user_email,user_name, user_age, user_sex, 
+                   user_address, user_height, user_body, user_phone_number,
+                   user_password, user_status, user_job, user_hobby_id, user_idol_id, user_update_at)
+            VALUES(id_seq.nextval, 'abc@naver.com', 'ȫ�浿', 20, 'M',
+                   '����� ���α�', 180, '����', '010-1234-5678',
+                   '1234', 'A', '���α׷���', '����', '1', sysdate);
+
+INSERT INTO fishing (fishing_id, fishermen_id, fish_id, fishing_status)
+			VALUES(fishing_seq.nextval, 6, 2, 'S');
+//��й�ȣ ����
+ALTER USER hr IDENTIFIED BY tkfkdckwdkdlstoddmfckwdk;

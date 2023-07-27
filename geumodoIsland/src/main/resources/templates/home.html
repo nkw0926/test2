@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body style="margin:0; padding:0; overflow: hidden">
+<div>
+	<div style="width:100vw; position: relative;">
+		<video src="/assets/video/ocean.mp4" style="width:100vw; position:absolute;" autoplay loop muted></video>
+		<div style="width:100vw; position:absolute; text-align:center; margin-top: 200px">
+			<div style="font-size:35px; font-weight:bold">사랑찾아 인생을 찾아...</div>
+			<div style="font-size:40px; font-weight:bold; margin-top:20px">금오도에 오신걸 환영합니다</div>
+			<div style="display:flex; justify-content:center">
+				<div id="start-btn" onclick="start()" style="width:8%; height:50px; line-height:50px; font-size:18px; font-weight:bold; margin-top:100px; border: 2px solid white; color:white; border-radius: 10px; cursor: pointer;">시작하기</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+ 	var startBtn = document.getElementById("start-btn");
+ 	startBtn.addEventListener('mouseover', function() {
+        startBtn.style.background = "white";
+        startBtn.style.border = "none";
+        startBtn.style.color = "black";
+    });
+ 	
+ 	startBtn.addEventListener('mouseout', function() {
+        startBtn.style.background = "transparent";
+        startBtn.style.border = "2px solid white";
+        startBtn.style.color = "white";
+    });
+ 	
+ 	function start() {
+ 		var link = 'http://localhost:8080/user/login';
+ 		location.href=link;
+	}
+</script>
+</html>

@@ -1,0 +1,102 @@
+CREATE SEQUENCE id_seq 
+    INCREMENT BY 1
+    START WITH 1
+    MINVALUE 1
+    MAXVALUE 9999
+    NOCYCLE
+    NOCACHE
+    NOORDER;
+
+ CREATE SEQUENCE aqua_seq 
+    INCREMENT BY 1
+    START WITH 1
+    MINVALUE 1
+    MAXVALUE 9999
+    NOCYCLE
+    NOCACHE
+    NOORDER;
+
+CREATE TABLE member (
+	user_id	            NUMBER                  PRIMARY KEY,
+    user_email          VARCHAR2(30)            UNIQUE NOT NULL,
+	user_name	        VARCHAR2(30)		    NOT NULL,
+	user_age	        NUMBER  		        NOT NULL,
+	user_sex	        VARCHAR2(1)	            NOT NULL,
+	user_address	    VARCHAR2(30)	        NOT NULL,
+	user_height	        NUMBER      	        NOT NULL,
+	user_body	        VARCHAR2(30)    	    NOT NULL,
+	user_phone_number	VARCHAR2(30)            NOT NULL,
+	user_password	    VARCHAR2(50)	        NOT NULL,
+	user_status	        VARCHAR2(1)	            NOT NULL,
+	user_job	        VARCHAR2(30)		    ,
+	user_hobby_id	    VARCHAR2(50)		    ,
+	user_idol_id	    VARCHAR2(50)		    ,
+	user_update_at	    TIMESTAMP		
+);
+
+CREATE TABLE photo (
+	photo_id	    NUMBER	    PRIMARY KEY,
+	photo_file	    BLOB        NULL,
+    user_id         NUMBER      NOT NULL,
+    CONSTRAINT fk_photo_userid FOREIGN KEY(user_id) REFERENCES member(user_id)
+);
+
+CREATE TABLE bait (
+	bait_id             NUMBER	    PRIMARY KEY,
+	not_free_bait_count	NUMBER		NOT NULL,
+	free_bait_count	    NUMBER		NOT NULL,
+    user_id             NUMBER      NOT NULL,
+    CONSTRAINT fk_bait_userid FOREIGN KEY(user_id) REFERENCES member(user_id)
+);
+
+CREATE TABLE aquarium (
+	aquarium_id 	NUMBER	PRIMARY KEY,
+	fishermen_id	NUMBER	NOT NULL,
+	fish_id	        NUMBER	NOT NULL,
+    CONSTRAINT fk_aquarium_fishermen_id FOREIGN KEY(fishermen_id) REFERENCES member(user_id),
+    CONSTRAINT fk_aquarium_fish_id FOREIGN KEY(fish_id) REFERENCES member(user_id)
+);
+
+CREATE TABLE fishing (
+	fishing_id	    NUMBER		    PRIMARY KEY,
+	fishermen_id	NUMBER	        NOT NULL,
+	fish_id	        NUMBER	        NOT NULL,
+	fishing_status	VARCHAR2(1)		NOT NULL,
+    CONSTRAINT fk_fishing_fishermen_id FOREIGN KEY(fishermen_id) REFERENCES member(user_id),
+    CONSTRAINT fk_fishing_fish_id FOREIGN KEY(fish_id) REFERENCES member(user_id)
+);
+
+CREATE TABLE report (
+	report_id	    NUMBER		    PRIMARY KEY,
+	reporter_id	    NUMBER	        NOT NULL,
+	target_id	    NUMBER		    NOT NULL,
+	report_content	VARCHAR2(300)	NOT NULL,
+	report_status	VARCHAR2(1)		NOT NULL,
+    CONSTRAINT fk_report_reporter_id FOREIGN KEY(reporter_id) REFERENCES member(user_id),
+    CONSTRAINT fk_report_target_id FOREIGN KEY(target_id) REFERENCES member(user_id)
+);
+
+CREATE TABLE hobby (
+	hobby_id	NUMBER	        PRIMARY KEY,
+	hobby_name	VARCHAR2(100)	NOT NULL
+);
+
+CREATE TABLE idol (
+	idol_id	    NUMBER	        PRIMARY KEY,
+	idol_name	VARCHAR2(100)	NULL
+);
+commit;
+
+INSERT INTO aquarium(aquarium_id, fishermen_id, fish_id)
+    VALUES(aqua_seq.nextval, 3, 1);
+    
+
+INSERT INTO member(user_id, user_email,user_name, user_age, user_sex, 
+                   user_address, user_height, user_body, user_phone_number,
+                   user_password, user_status, user_job, user_hobby_id, user_idol_id, user_update_at)
+            VALUES(id_seq.nextval, 'abc@naver.com', '홍길동', 20, 'M',
+                   '서울시 종로구', 180, '건장', '010-1234-5678',
+                   '1234', 'A', '프로그래머', '낚시', '1', sysdate);
+
+//비밀번호 변경
+ALTER USER hr IDENTIFIED BY tkfkdckwdkdlstoddmfckwdk;
