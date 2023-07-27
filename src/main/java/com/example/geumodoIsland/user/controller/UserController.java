@@ -294,7 +294,7 @@ public class UserController {
 					logger.info("userId: " + String.valueOf(session.getAttribute("userId")));
 					return "redirect:/ocean/all";
 				} else if (userIdAndPassword.getUserStatus() == 'P'){
-					return "redirect:/admin";
+					return "redirect:/admin/main";
 				}
 				else {
 					redirectAttributes.addFlashAttribute("message", "탈퇴된 회원입니다! 다시 로그인해주세요");
