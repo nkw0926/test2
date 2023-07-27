@@ -96,7 +96,6 @@ public class AdminController {
         List<UserWithPhotos> allUsersWithPhotosFinal = new ArrayList<UserWithPhotos>();
         allUsersWithPhotos.stream().forEach((user) -> {
             List<UserPhotos> userPhotoFileNames = adminService.getAllUserWithPhotos(user.getUserId());
-
             UserWithPhotos userWithPhotos = UserWithPhotos.builder()
                     .userId(user.getUserId())
                     .userName(user.getUserName())
@@ -120,7 +119,6 @@ public class AdminController {
 
     @GetMapping("/notices")
     public String getNoticesForUser(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-
 
         String userIdInSession = String.valueOf(session.getAttribute("userId"));
 
