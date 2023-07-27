@@ -121,14 +121,13 @@ public class OceanController {
     }
 
     @GetMapping(value = "/userDetail")
-    public String selectAUserInfo(@RequestParam("userId") int userId, Model model) {
-        int loginUserId = 6;
+    public String selectAUserInfo(@RequestParam("userId") int targetUserId, Model model,HttpSession session) {
+        int userIdInSession = (int) session.getAttribute("userId");
         model.addAttribute("userState", "로그아웃");
 
-        Map<String, Object> AUserInfo = userService.selectAUserInfo(userId);
-        List<String> userPhotoName = photoService.selectUserPhoto(userId);
+        Map<String, Object> AUserInfo = userService.selectAUserInfo(targetUserId);
+        List<String> userPhotoName = photoService.selectUserPhoto(targetUserId);
         model.addAttribute("userPhotoName", userPhotoName);
-
 
 
         Date now = new Date();
@@ -147,17 +146,19 @@ public class OceanController {
         String[] userIntroductions = (String[]) AUserInfo.get("userIntroductions");
 
         model.addAttribute("userIntroductions", userIntroductions);
-        model.addAttribute("loginUserId", loginUserId);
+        model.addAttribute("loginUserId", userIdInSession);
 
-        int isInAqua = aquaService.selectRowByUserIdTargetId(loginUserId, userId);
+        int isInAqua = aquaService.selectRowByUserIdTargetId(userIdInSession, targetUserId);
         model.addAttribute("isInAqua", isInAqua);
 
 
-        int isThrowBait = fishingService.seclectRowByUserIdTargetId(loginUserId, userId);
+        int isThrowBait = fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId);
         model.addAttribute("isThrowBait", isThrowBait);
 
-        Object fishingState = fishingService.seclectFishingStatus(loginUserId, userId);
-
+        Object fishingState = fishingService.seclectFishingStatus(userIdInSession, targetUserId);
+        System.out.println(userIdInSession + "  " + targetUserId);
+        System.out.println("fishingState");
+        System.out.println(fishingState);
         if (fishingState != null) {
             model.addAttribute("fishingState", fishingState);
         } else {
@@ -168,20 +169,22 @@ public class OceanController {
     }
 
     @PostMapping("/freeFishInAqua")
-    public String freeFish(@RequestParam int loginUserId, @RequestParam int targetUserId, Model model) {
-        aquaService.deleteAqua(loginUserId, targetUserId);
-        return selectAUserInfo(targetUserId, model);
+    public String freeFish( @RequestParam int targetUserId, Model model,HttpSession session) {
+        int userIdInSession = (int) session.getAttribute("userId");
+        aquaService.deleteAqua(userIdInSession, targetUserId);
+        return selectAUserInfo(targetUserId, model, session);
     }
 
     //이거 service로 보내고 transactional 달아야하는데,,,
     @PostMapping("/minusBait")
-    public String minusBait( @RequestParam int targetUserId, Model model, HttpSession session) {
+    public String minusBait(@RequestParam int targetUserId, Model model, HttpSession session) {
         // 해당 유저 가용 미끼 있는지 확인
         int userIdInSession = (int) session.getAttribute("userId");
-        String throwBaitResult =oceanService.throwBait(userIdInSession, targetUserId);
-        if( throwBaitResult.equals( "/ocean/userDetail?userId=" + throwBaitResult)){
+        String throwBaitResult = oceanService.throwBait(userIdInSession, targetUserId);
+        if (throwBaitResult.equals("/ocean/userDetail?userId=" + throwBaitResult)) {
+
             return "/ocean/userDetail?userId=" + throwBaitResult;
-        }else{
+        } else {
             model.addAttribute("message", throwBaitResult);
             model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
             return "ocean/message";

@@ -17,4 +17,5 @@ public interface IAquaRepository {
     int selectRowByUserIdTargetId(@Param("userId") int loginUserId, @Param("targetUserId") int targetUserId);
 
     void insertAquarium(@Param("userId") int loginUserId, @Param("targetUserId") int targetUserId);
+
 }

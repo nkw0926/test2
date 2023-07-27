@@ -3,6 +3,7 @@ package com.example.geumodoIsland.aquarium.service;
 import java.util.List;
 
 import com.example.geumodoIsland.aquarium.model.Aquarium;
+import com.example.geumodoIsland.fishing.model.fishing;
 
 public interface IAquaService {
 
@@ -11,5 +12,7 @@ public interface IAquaService {
 
     void insertAquarium(int loginUserId, int targetUserId);
     void deleteAqua(int loginUserId, int targetUserId);
-    public String throwBait(int userIdInSession, int targetUserId) ;
+     String throwBait(int userIdInSession, int targetUserId) ;
+
+     fishing selectRowByUserId(int fishermenId);
 }

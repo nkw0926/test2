@@ -3,9 +3,10 @@ package com.example.geumodoIsland.aquarium.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.geumodoIsland.fishing.dao.IFishingRepository;
+import com.example.geumodoIsland.fishing.model.fishing;
 import com.example.geumodoIsland.fishing.service.IFishingService;
 import com.example.geumodoIsland.ocean.dao.IOceanRepository;
-import com.example.geumodoIsland.ocean.service.IOceanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class AquaService implements IAquaService {
 
     @Autowired
     IFishingService fishingService;
+    @Autowired
+    IFishingRepository fishingRepository;
+
 
     //내 아쿠아리움 물고기 목록
     public List<Aquarium> showFishList(int fishermenId) {
@@ -70,6 +74,7 @@ public class AquaService implements IAquaService {
             }
             // 그 낚시 테이블에 정보 기록
             fishingService.insertFishingInfo(userIdInSession, targetUserId);
+            deleteAqua(userIdInSession, targetUserId);
             return "미끼를 성공적으로 던졌습니다! \n 물고기의 반응을 기다려주세요!";
 
         } else if (fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId) != 0) {
@@ -77,5 +82,11 @@ public class AquaService implements IAquaService {
             return "해당 유저에게 미끼를 던진 과거 기록이 있습니다!";
         }
         return "/aquarium";
+    }
+
+    @Override
+    public fishing selectRowByUserId(int fishermenId) {
+
+        return fishingRepository.selectFishingStatusByUserId(fishermenId);
     }
 }

@@ -16,7 +16,7 @@
 		WHERE a.fishermen_id = #{fishermenId}
 	]]>
 	</select>
-	
+
     <select id="selectFishList" parameterType="hashmap" resultType="com.example.geumodoIsland.aquarium.model.Aquarium">
 	<![CDATA[
         SELECT aquarium_id  AS "aquariumId",
@@ -50,4 +50,7 @@
           and fish_id = #{targetUserId}
         ]]>
     </delete>
+
+
+
 </mapper>
