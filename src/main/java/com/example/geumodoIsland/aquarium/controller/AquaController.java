@@ -40,8 +40,9 @@ public class AquaController {
 	}
     
     @PostMapping("/addAquarium")
-    public String addAquarium(@RequestParam int loginUserId, @RequestParam int targetUserId, Model model) {
-        if(aquaService.selectRowByUserIdTargetId(loginUserId,targetUserId) ==0){
+    public String addAquarium(int targetUserId, Model model, HttpSession session) {
+    	int loginUserId = Integer.valueOf(String.valueOf(session.getAttribute("userId")));
+        if(aquaService.selectRowByUserIdTargetId(loginUserId,targetUserId) == 0){
             // 삽입
             aquaService.insertAquarium(loginUserId,targetUserId);
             model.addAttribute("message", "물고기를 수족관에 담았습니다! ");
