@@ -77,7 +77,8 @@
 														<td th:if="${baiting.baitingStatus != 'W'}"
 															th:text="${baiting.baitingStatus}"></td>
 														<td>
-															<button class="btn-retrieve-baiting" th:data-baiting-id="${baiting.baitingId}" onclick="retrieveBaiting(event)">회수</button>
+															<button class="btn-retrieve-baiting" th:data-baiting-id="${baiting.baitingId}" 
+																	onclick="retrieveBaiting(event)">회수</button>
 														</td>
 													</tr>
 												</tbody>
