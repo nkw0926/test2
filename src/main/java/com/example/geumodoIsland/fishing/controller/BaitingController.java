@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.geumodoIsland.fishing.model.Baiting;
 import com.example.geumodoIsland.fishing.service.IBaitingService;
@@ -69,5 +70,17 @@ public class BaitingController {
 	public ResponseEntity<Void> rejectBaiting(@PathVariable int baitingId) {
 	    baitingService.rejectBaiting(baitingId);
 	    return ResponseEntity.ok().build();
+	}
+	
+	// 로그인, 로그아웃 처리
+	@PostMapping("/getUserState")
+	public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
+		System.out.println(userState);
+		if (userState.equals("로그인")) {
+			return "로그인";
+		} else {
+			session.invalidate();
+			return "로그아웃";
+		}
 	}
 }
