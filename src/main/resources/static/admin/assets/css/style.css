@@ -65,6 +65,7 @@ h6 {
   margin-bottom: 0;
   font-weight: 600;
   color: #012970;
+  margin-left: 12%;
 }
 
 /*--------------------------------------------------------------
@@ -248,6 +249,7 @@ h6 {
 
 .card-body {
   padding: 0 20px 20px 20px;
+  width: 850px;
 }
 
 .card-img-overlay {
