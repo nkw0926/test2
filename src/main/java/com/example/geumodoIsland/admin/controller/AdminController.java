@@ -16,7 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.geumodoIsland.admin.service.IAdminService;
 
 import jakarta.servlet.http.HttpSession;
-// 커밋 테스트
 
 @Controller
 @RequestMapping("/admin")
@@ -42,14 +41,14 @@ public class AdminController {
                 .sorted(Comparator.comparingInt(Report::getReportId))
                 .collect(Collectors.toList());
         model.addAttribute("reports", reports);
-//        return "admin/admin-reports";
+
         return "admin/r-test";
     }
 
     @PostMapping("/reports/change-status")
     public String changeReportStatus(@RequestParam int reportId, @RequestParam String reportStatus, RedirectAttributes redirectAttributes) {
         adminService.changeReportStatus(reportId, reportStatus);
-        redirectAttributes.addFlashAttribute("message", "신고 처리 상태가 변경되었습니다.");
+        redirectAttributes.addFlashAttribute("message", "신고 상태가 변경되었습니다.");
         return "redirect:/admin/reports";
     }
 
@@ -69,7 +68,7 @@ public class AdminController {
         model.addAttribute("reportContents", reportContents);
         model.addAttribute("targetId", targetId);
         model.addAttribute("userState", "로그아웃");
-//        return "admin/submit";
+
         return "admin/s-test";
     }
 
@@ -80,10 +79,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("message", "신고 사유를 선택해주세요!");
             return "redirect:/admin/submit?targetId=" + targetId;
         } else {
-            int reporterId = (int) session.getAttribute("userId"); //나중에 이걸로!!
-//             int reporterId = 10; //임시로 지정
-
-
+            int reporterId = (int) session.getAttribute("userId");
             // targetId, reporterId, reportContent를 사용하여 신고 기능 처리
             adminService.insertReport(targetId, reporterId, reportContent);
             model.addAttribute("message", "신고가 완료되었습니다.");
@@ -109,7 +105,7 @@ public class AdminController {
         });
 
         model.addAttribute("allUsersWithPhotosFinal", allUsersWithPhotosFinal);
-//        return "admin/admin-user-photos";
+        
         return "admin/p-test";
     }
 
@@ -123,20 +119,24 @@ public class AdminController {
 
     @GetMapping("/notices")
     public String getNoticesForUser(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-
         String userIdInSession = String.valueOf(session.getAttribute("userId"));
-
         if (userIdInSession == "null") {
             redirectAttributes.addFlashAttribute("userState", "로그인");
             return "redirect:/user/login";
         } else {
             int userId = Integer.valueOf(userIdInSession);
-            List<Notice> notices = adminService.getNoticesByUserId(userId);
-            Collections.sort(notices, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt())); //정렬
-            adminService.setReportCreatedAtForNotices(notices); //reportCreatedAt 값을 notice의 createdAt으로 설정
-            model.addAttribute("notices", notices);
+            List<Notice> notice1 = adminService.getNoticesByUserId(userId);
+            List<Notice> notice2 = adminService.getNoticesByReportId(userId);
+            
+            Collections.sort(notice1, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt())); //정렬
+            Collections.sort(notice2, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
+            
+            adminService.setReportCreatedAtForNotices(notice1); //reportCreatedAt 값을 notice의 createdAt으로 설정
+            adminService.setReportCreatedAtForNotices(notice2);
+            model.addAttribute("notice1", notice1);
+            model.addAttribute("notice2", notice2);
             model.addAttribute("userState", "로그아웃");
-//        return "admin/admin-notices";
+
             return "admin/n-test";
         }
     }
