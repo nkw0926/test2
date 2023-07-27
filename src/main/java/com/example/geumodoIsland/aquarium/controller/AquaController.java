@@ -34,6 +34,11 @@ public class AquaController {
             return "redirect:/user/login";
         } else {
             int fishermenId = Integer.valueOf(userIdInSession);
+//           String fishingStatus = String.valueOf(aquaService.selectRowByUserId(fishermenId).getFishingStatus());
+//            if( fishingStatus.equals('W') || fishingStatus.equals('S')  ){
+//// 상태가
+//            }
+
             List<Aquarium> aquariumList = aquaService.showFishList(fishermenId);
 
             Date now = new Date();
@@ -58,6 +63,7 @@ public class AquaController {
         if (aquaService.selectRowByUserIdTargetId(loginUserId, targetUserId) == 0) {
             // 삽입
             aquaService.insertAquarium(loginUserId, targetUserId);
+
             model.addAttribute("message", "물고기를 수족관에 담았습니다! ");
             model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
             return "ocean/message";
@@ -85,6 +91,7 @@ public class AquaController {
         int userIdInSession = (int) session.getAttribute("userId");
         String throwBaitResult =aquaService.throwBait(userIdInSession, targetUserId);
         if( throwBaitResult.equals( throwBaitResult.equals("/aquarium"))){
+
             return "/aquarium";
         }else{
             model.addAttribute("message", throwBaitResult);
