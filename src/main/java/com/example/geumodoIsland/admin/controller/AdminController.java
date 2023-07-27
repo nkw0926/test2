@@ -74,6 +74,8 @@ public class AdminController {
         } else {
             int reporterId = (int) session.getAttribute("userId"); //나중에 이걸로!!
 //             int reporterId = 10; //임시로 지정
+            System.out.println("reporterId");
+            System.out.println(reporterId);
             // targetId, reporterId, reportContent를 사용하여 신고 기능 처리
             adminService.insertReport(targetId, reporterId, reportContent);
             model.addAttribute("message", "신고가 완료되었습니다.");
