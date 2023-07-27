@@ -10,37 +10,30 @@
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <h1>아쿠아리움</h1>
 <br><br><br>
-<div id="table-container">
-    <div class="card mb-4">
+<div id="table-container" style="display: flex; justify-content: center">
+    <div class="card mb-4" style="width:1200px;">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             나의 아쿠아리움
         </div>
         <div class="card-body">
             <table class="datatable table table-striped" style="width:100%">
-                <thead style="text-align: center; width: 90vh">
+                <thead style="text-align: left; width: 90vh">
                 <tr>
-                    <th style="width: 10px !important;">Aquarium ID</th>
-                    <th style="width: 10px !important;">Fishermen ID</th>
-                    <th style="width: 10px !important;">Fish ID</th>
                     <th>이름</th>
                     <th>출생년도</th>
-                    <th>뭐임</th>
-                    <th>뭐임</th>
-
+                    <th>방생</th>
+                    <th>미끼던지기</th>
                 </tr>
                 </thead>
 
                 <tbody>
 
                 <tr th:each="aquarium : ${aquariumList}">
-                    <td th:text="${aquarium.aquariumId}"></td>
-                    <td th:text="${aquarium.fishermenId}"></td>
-                    <td th:text="${aquarium.fishId}"></td>
-                    <td th:text="${aquarium.fishName}"></td>
-                    <td th:text="${aquarium.fishAge}"></td>
-                    <td>  <button type="button" class="btn btn-danger">방생</button></td>
-                    <td>  <button type="button" class="btn btn-success">미끼던지기</button> </td>
+                    <td th:text="${aquarium.fishName}" style="text-align: left;"></td>
+                    <td th:text="${aquarium.fishAge}" style="text-align: left;"></td>
+                    <td style="text-align: left;">  <button type="button" class="btn btn-danger" >방생</button></td>
+                    <td style="text-align: left;">  <button type="button" class="btn btn-success">미끼던지기</button> </td>
                 </tr>
                 </tbody>
             </table>
