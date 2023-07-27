@@ -143,11 +143,11 @@
     }
 
     function minusbait() {
+        const userId = "[[${userInfo.userId}]]";
         if (!confirm('미끼를 던질까요?')) {
             return false;
         }
-        var targetUserId = /*[[${userInfo.userId}]]*/"";
-
+        var targetUserId = /*[[${userInfo.userId}]]*/;
         const formHtml = `
                     <form id="minusBaitForm" action="/ocean/minusBait" method="post">
 
@@ -159,27 +159,21 @@
         const form = doc.body.firstChild;
         document.body.append(form);
         document.getElementById('minusBaitForm').submit();
-        console.log("미끼던짐");
     }
 
     function addAquarium() {
         if (!confirm('물고기를 수족관에 담을까요?')) {
             return false;
         }
-        var targetUserId = /*[[${userInfo.userId}]]*/"";
-
         const formHtml = `
-                    <form id="addAquariumForm" action="/aquarium/addAquarium" method="post">
-
-
-                        <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
-                    </form>`;
+                     <form id="addAquariumForm" action="/aquarium/addAquarium" method="post">
+                         <input  id="targetUserId" name="targetUserId" value= [[${userInfo.userId}]] />
+                     </form>`;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
 
         const form = doc.body.firstChild;
         document.body.append(form);
         document.getElementById('addAquariumForm').submit();
-        console.log("수족관에 넣음");
     }
 
     /*]]>*/

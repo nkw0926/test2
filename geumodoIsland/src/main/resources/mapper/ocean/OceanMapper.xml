@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.geumodoIsland.ocean.dao.IOceanRepository">
+    <select id="selectFishListByLocal" parameterType="hashmap"
+            resultType="com.example.geumodoIsland.user.model.User">
+        <![CDATA[
+        SELECT user_id            AS "userId",
+               user_email         AS "userEmail",
+               user_name          AS "userName",
+               user_age           AS "userAge",
+               user_sex           AS "userSex",
+               user_address       AS "userAddress",
+               user_height        AS "userHeight",
+               user_body          AS "userBody",
+               user_phone_number  AS "userPhoneNumber",
+               user_password      AS "userPassword",
+               user_status        AS "userStatus",
+               user_job           AS "userJob",
+               user_hobbies       AS "userHobbies",
+               user_introductions AS "userIntroductions",
+               bies               AS "userHobbies",
+               user_introductions AS "userIntroductions",
+               user_update_at     AS "userUpdateAt"
+
+        FROM member
+        ]]>
+    </select>
+
+
+    <select id="selectCountAllBait" parameterType="int">
+        <![CDATA[
+        SELECT (not_free_bait_count + free_bait_count) as availableBait
+        FROM bait
+        WHERE user_id = #{userId}
+        ]]>
+    </select>
+
+    <select id="selectCountNotFreeBait" parameterType="int"
+    >
+        <![CDATA[
+        SELECT not_free_bait_count
+        FROM bait
+        WHERE user_id = #{userId}
+        ]]>
+    </select>
+
+    <select id="selectCountFreeBait" parameterType="int"
+    >
+        <![CDATA[
+        SELECT free_bait_count
+        FROM bait
+        WHERE user_id = #{userId}
+        ]]>
+    </select>
+
+    <update id="minusFreeBait" parameterType="int">
+        <![CDATA[
+        UPDATE bait
+        SET free_bait_count = free_bait_count - 1
+        WHERE user_id = #{userId}
+        ]]>
+    </update>
+    <update id="minusNotFreeBait" parameterType="int">
+        <![CDATA[
+        UPDATE bait
+        SET not_free_bait_count = not_free_bait_count - 1
+        WHERE user_id = #{userId}
+        ]]>
+    </update>
+    
+    <update id="resetFreeBait">
+        <![CDATA[
+        UPDATE bait
+        SET free_bait_count = 3
+        ]]>
+    </update>
+</mapper>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+        namespace="com.example.geumodoIsland.user.dao.IUserRepository">
+    <select id="selectAllFishList"
+            resultType="com.example.geumodoIsland.user.model.User">
+        <![CDATA[
+        SELECT user_id            AS "userId",
+               user_email         AS "userEmail",
+               user_name          AS "userName",
+               user_age           AS "userAge",
+               user_sex           AS "userSex",
+               user_address       AS "userAddress",
+               user_height        AS "userHeight",
+               user_body          AS "userBody",
+               user_phone_number  AS "userPhoneNumber",
+               user_password      AS "userPassword",
+               user_status        AS "userStatus",
+               user_job           AS "userJob",
+               user_hobbies       AS "userHobbies",
+               user_introductions AS "userIntroductions",
+               user_update_at     AS "userUpdateAt"
+
+        FROM member
+        ]]>
+	</select>
+
+    <select id="selectAUserInfo" parameterType="int"
+            resultType="com.example.geumodoIsland.user.model.User">
+        <![CDATA[
+        SELECT user_id            AS "userId",
+               user_email         AS "userEmail",
+               user_name          AS "userName",
+               user_age           AS "userAge",
+               user_sex           AS "userSex",
+               user_address       AS "userAddress",
+               user_height        AS "userHeight",
+               user_body          AS "userBody",
+               user_phone_number  AS "userPhoneNumber",
+               user_password      AS "userPassword",
+               user_status        AS "userStatus",
+               user_job           AS "userJob",
+               user_hobbies       AS "userHobbies",
+               user_introductions AS "userIntroductions",
+               user_update_at     AS "userUpdateAt"
+
+        FROM member
+		WHERE user_id = #{userId}
+		]]>
+    </select>
+    
+    <select id="selectFishListByAddress" parameterType="hashmap"
+            resultType="com.example.geumodoIsland.user.model.User">
+        <![CDATA[
+        SELECT user_id            AS "userId",
+               user_email         AS "userEmail",
+               user_name          AS "userName",
+               user_age           AS "userAge",
+               user_sex           AS "userSex",
+               user_address       AS "userAddress",
+               user_height        AS "userHeight",
+               user_body          AS "userBody",
+               user_phone_number  AS "userPhoneNumber",
+               user_password      AS "userPassword",
+               user_status        AS "userStatus",
+               user_job           AS "userJob",
+               user_hobbies       AS "userHobbies",
+               user_introductions AS "userIntroductions",
+               user_update_at     AS "userUpdateAt"
+
+        FROM member
+        WHERE user_address = #{loginUserAddress}
+          and NOT user_sex IN (#{loginUserSex})
+          and NOT user_id IN (#{userId})
+        ]]>
+    </select>
+    
+    <insert id="insertIntoUser" parameterType="com.example.geumodoIsland.user.model.User">
+    	<selectKey keyProperty="userId" resultType="int" order="BEFORE">
+    		SELECT MEMBER_SEQ.NEXTVAL FROM DUAL
+    	</selectKey>
+    	<![CDATA[
+	        INSERT INTO
+	        	member ( user_id, user_email, user_name, user_age, user_sex, user_address, 
+	        	user_height, user_body, user_phone_number, user_password, user_job, user_hobbies, user_introductions , user_update_at)
+	        VALUES
+        	(#{userId}, #{userEmail}, #{userName} , #{userAge}, #{userSex}, #{userAddress}, #{userHeight}, #{userBody},
+        	#{userPhoneNumber}, #{userPassword}, #{userJob}, #{userHobbies}, #{userIntroductions}, SYSDATE)
+        ]]>
+    </insert>
+    
+    <select id="emailCheck" parameterType="String" resultType="int">
+    	<![CDATA[
+    	SELECT COUNT(user_email) FROM member WHERE user_email = #{userEmail}
+    	]]>
+    </select>
+    
+    <select id="selectUserIdByUserEmail" parameterType="String" resultType="Integer">
+    	<![CDATA[
+    	SELECT user_id FROM member WHERE user_email = #{userEmail}
+    	]]>
+    </select>
+    
+    <select id="selectUserPasswordAndUserIdByUserEmail" parameterType="String" resultType="com.example.geumodoIsland.user.model.UserIdAndPassword">
+    	<![CDATA[
+    	SELECT user_id AS userId, user_password AS userPassword, user_status AS userStatus FROM member WHERE user_email = #{userEmail}
+    	]]>
+	</select>
+
+    <select id="selectFishListByCondition" parameterType="java.util.List"
+            resultType="com.example.geumodoIsland.user.model.User">
+
+        SELECT user_id AS "userId",
+        user_email AS "userEmail",
+        user_name AS "userName",
+        user_age AS "userAge",
+        user_sex AS "userSex",
+        user_address AS "userAddress",
+        user_height AS "userHeight",
+        user_body AS "userBody",
+        user_phone_number AS "userPhoneNumber",
+        user_password AS "userPassword",
+        user_status AS "userStatus",
+        user_job AS "userJob",
+        user_hobbies AS "userHobbies",
+        user_introductions AS "userIntroductions",
+        user_update_at AS "userUpdateAt"
+        FROM member
+        WHERE
+        <if test="hobbyList.size() != 0">
+            (
+            <foreach collection="hobbyList" item="addr" separator=" OR ">
+                user_hobbies LIKE ('%' || #{addr}|| '%')
+            </foreach>
+            ) and
+        </if>
+
+        <if test="personalityList.size() != 0">
+            (
+            <foreach collection="personalityList" item="addr" separator=" OR ">
+                user_introductions LIKE ('%' || #{addr}|| '%')
+            </foreach>
+            ) and
+        </if>
+        NOT user_sex IN (#{loginUserSex})
+        and NOT user_id IN (#{loginUserId})
+
+        <if test="locationList.size() != 0">
+            and user_address IN
+            <foreach collection="locationList" item="addr" open="(" separator="," close=")">
+                #{addr}
+            </foreach>
+        </if>
+
+        <if test="ageList.size() != 0">
+            and user_age IN
+            <foreach collection="ageList" item="addr" open="(" separator="," close=")">
+                #{addr}
+            </foreach>
+        </if>
+    </select>
+    
+    <select id="selectUserProfileByUserId" parameterType="int"
+            resultType="com.example.geumodoIsland.user.model.UserProfile">
+        <![CDATA[
+	        SELECT user_email         AS "userEmail",
+	               user_name          AS "userName",
+	               user_age           AS "userAge",
+	               user_sex           AS "userSex",
+	               user_address       AS "userAddress",
+	               user_height        AS "userHeight",
+	               user_body          AS "userBody",
+	               user_phone_number  AS "userPhoneNumber",
+	               user_job           AS "userJob",
+	               user_hobbies       AS "userHobbies",
+	               user_introductions AS "userIntroductions"
+	        FROM member
+			WHERE user_id = #{userId}
+		]]>
+    </select>
+    
+     <insert id="insertIntoBait" parameterType="com.example.geumodoIsland.user.model.UserBait">
+    	<selectKey keyProperty="baitId" resultType="int" order="BEFORE">
+    		SELECT BAIT_SEQ.NEXTVAL FROM DUAL
+    	</selectKey>
+    	<![CDATA[
+	        INSERT INTO
+	        	bait ( bait_id, user_id )
+	        VALUES
+        	(#{baitId}, #{userId})
+        ]]>
+    </insert>
+    
+    <update id="updateUserPassword" parameterType="com.example.geumodoIsland.user.model.UserUpdatePassword">
+        <![CDATA[
+        UPDATE member
+        SET user_password = #{userPassword}
+        WHERE user_email = #{userEmail}
+        ]]>
+    </update>
+</mapper>
+

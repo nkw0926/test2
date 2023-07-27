@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.geumodoIsland.fishing.dao.IBaitingRepository">
+	
+	<!-- 낚시 목록 조회 -->
+	<select id="showBaitingList" parameterType="int" resultType="com.example.geumodoIsland.fishing.model.Baiting">
+	<![CDATA[
+		SELECT
+			f.fishing_id			AS "baitingId",
+			f.fishermen_id			AS "fishermenId",
+			f.fish_id				AS "fishId",
+			f.fishing_status		AS "baitingStatus",
+			m.user_name				AS "fishName",
+			m.user_age				AS "fishAge"
+		FROM fishing f
+		JOIN member m ON f.fish_id = m.user_id
+		WHERE f.fishermen_id = #{fishermenId}
+	]]>
+	</select>
+
+	<!-- 미끼 들어온 내역 조회 -->
+	<select id="showBaitedList" parameterType="int" resultType="com.example.geumodoIsland.fishing.model.Baiting">
+    <![CDATA[
+        SELECT
+            f.fishing_id			AS "baitingId",
+            f.fishermen_id			AS "fishermenId",
+            f.fishing_status		AS "baitingStatus",
+            m.user_name				AS "fishermenName",
+            m.user_age				AS "fishermenAge"
+        FROM fishing f
+        JOIN member m ON f.fishermen_id = m.user_id
+        WHERE f.fish_id = #{fishId}
+    ]]>
+	</select>
+	
+	<!-- 물고기(사용자) 정보 조회 -->
+	<select id="findById" parameterType="int" resultType="com.example.geumodoIsland.fishing.model.Baiting">
+    <![CDATA[
+        SELECT
+            f.fishing_id			AS "baitingId",
+            f.fishermen_id			AS "fishermenId",
+            f.fish_id				AS "fishId",
+            f.fishing_status		AS "baitingStatus"
+        FROM fishing f
+        WHERE f.fish_id = #{fishId} AND f.fishing_status = 'S' AND ROWNUM <= 1
+    ]]>
+	</select>
+	
+	<!-- 낚시 성공 시 물고기(사용자)의 전화번호 반환 -->
+	<select id="getPhoneNumberWhenBaited" parameterType="int" resultType="java.lang.String">
+	    <![CDATA[
+	        SELECT
+	            m.user_phone_number
+	        FROM fishing f
+	        JOIN member m ON f.fish_id = m.user_id
+	        WHERE f.fish_id = #{fishId} AND f.fishing_status = 'S' AND ROWNUM <= 1
+	    ]]>
+	</select>
+	
+	<!-- 물고기(사용자)가 미끼를 먹은 경우 물고기 상태를 "S"로 업데이트 -->
+	<update id="updateBaitingStatusToS" parameterType="int">
+	    <![CDATA[
+	        UPDATE fishing
+	        SET fishing_status = 'S'
+	        WHERE fishing_id = #{baitingId}
+	    ]]>
+	</update>
+	
+	<!-- 물고기(사용자)가 미끼를 뱉은 경우 물고기 상태를 "F"로 업데이트 -->
+	<update id="updateBaitingStatusToF" parameterType="int">
+	    <![CDATA[
+	        UPDATE fishing
+	        SET fishing_status = 'F'
+	        WHERE fishing_id = #{baitingId}
+	    ]]>
+</update>
+	
+</mapper>

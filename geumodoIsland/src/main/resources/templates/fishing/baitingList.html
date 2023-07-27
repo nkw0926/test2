@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+	<h1>낚시 스토리</h1>
+	<br>
+	<br>
+	<div id="table-container">
+		<table>
+			<caption>나의 낚시 현황</caption>
+			<thead>
+				<tr>
+					<th>이름</th>
+					<th>출생년도</th>
+					<th>낚시 상태</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="baiting : ${baitingList}"
+					th:if="${baiting.baitingStatus == 'W'}">
+					<td th:text="${baiting.fishName}"></td>
+					<td th:text="${baiting.fishAge}"></td>
+					<td><span th:if="${baiting.baitingStatus == 'W'}">밑밥
+							뿌리는 중...</span> <span th:if="${baiting.baitingStatus != 'W'}"
+						th:text="${baiting.baitingStatus}"></span></td>
+				</tr>
+			</tbody>
+		</table>
+		<br> <br> <br>
+		<table>
+			<caption>나의 낚시 결과</caption>
+			<thead>
+				<tr>
+					<th>이름</th>
+					<th>출생년도</th>
+					<th>낚시 상태</th>
+					<th>전화번호</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="baiting : ${baitingList}"
+					th:if="${baiting.baitingStatus == 'S' or baiting.baitingStatus == 'F'}">
+					<td th:text="${baiting.fishName}"></td>
+					<td th:text="${baiting.fishAge}"></td>
+					<td><span
+						th:text="${baiting.baitingStatus == 'S' ? '미끼를 물었어요!' : '물고기가 도망가버렸어요~'}"></span>
+					</td>
+					<td>
+						<button th:if="${baiting.baitingStatus == 'S'}"
+							th:data-fish-id="${baiting.fishId}" class="btn-get-phone-number"
+							onclick="getPhoneNum(event)">전화번호 받기</button> <th:block
+							th:if="${baiting.baitingStatus == 'F'}">전화번호는 다음 기회에~</th:block>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<!-- 모달 컨테이너 -->
+		<div class="modal-container" id="custom-modal">
+			<div class="modal-content">
+				<span class="close-btn" onclick="closeModal()">&times;</span>
+				<p id="modal-message"></p>
+			</div>
+		</div>
+
+		<br> <br> <br>
+
+		<table>
+			<caption>내게 온 미끼</caption>
+			<thead>
+				<tr>
+					<th>이름</th>
+					<th>출생년도</th>
+					<th>먹기/뱉기
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="baiting : ${baitedList}"
+					th:if="${baiting.baitingStatus == 'W'}">
+					<td th:text="${baiting.fishermenName}"></td>
+					<td th:text="${baiting.fishermenAge}"></td>
+					<td>
+						<button class="accept" th:data-baiting-id="${baiting.baitingId}"
+							onclick="acceptBaiting(event); deleteLine(this);">
+							<span class="btn-text">먹기</span> <span class="heart-icon"></span>
+						</button>
+						<button class="reject" th:data-baiting-id="${baiting.baitingId}"
+							onclick="rejectBaiting(event); deleteLine(this);">
+							<span class="btn-text">뱉기</span> <span class="heart-icon-crack"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<script>
+		// 모달 열기
+		function openModal(message) {
+			const modalContainer = document.getElementById('custom-modal');
+			const modalMessage = document.getElementById('modal-message');
+			modalMessage.innerHTML = message;
+			modalContainer.style.display = 'block';
+		}
+
+		// 모달 닫기
+		function closeModal() {
+			const modalContainer = document.getElementById('custom-modal');
+			modalContainer.style.display = 'none';
+		}
+
+		// 전화번호 받기
+		function getPhoneNum() {
+			if (event.target.classList.contains('btn-get-phone-number')) {
+				var fishId = event.target.getAttribute('data-fish-id');
+				$.ajax({
+					url : '/getPhoneNumber/' + fishId,
+					type : 'GET',
+					success : function(response) {
+						if (response) {
+							const message = '물고기의 전화번호: ' + response
+									+ '<br>행복한 사랑하세요!';
+							openModal(message);
+						} else {
+							alert('전화번호를 받아올 수 없습니다.');
+						}
+					},
+					error : function(xhr) {
+						alert('전화번호를 받아오는데 실패했습니다. 오류 코드: ' + xhr.status);
+					}
+				});
+			}
+		}
+
+		//먹기
+		function acceptBaiting(event) {
+			var button = event.currentTarget;
+			var baitingId = button.getAttribute('data-baiting-id');
+			var fishermenName = button.closest('tr').querySelector('td:nth-child(1)').innerText; // 낚시꾼 이름 가져오기
+			$.ajax({
+				url : '/baiting/accept/' + baitingId,
+				type : 'POST',
+				success : function() {
+					var message = fishermenName + '님의 미끼를 먹었습니다!'; // 메시지 생성
+					openModal(message);
+					button.closest('tr').style.display = 'none';
+				},
+				error : function(xhr) {
+					alert('물고기가 미끼를 먹는데 실패했습니다. 오류 코드: ' + xhr.status);
+				}
+			});
+		}
+
+		// 뱉기 
+		function rejectBaiting(event) {
+			var button = event.currentTarget;
+			var baitingId = button.getAttribute('data-baiting-id');
+			var fishermenName = button.closest('tr').querySelector('td:nth-child(1)').innerText; // 낚시꾼 이름 가져오기
+			$.ajax({
+				url : '/baiting/reject/' + baitingId,
+				type : 'POST',
+				success : function(event) {
+					var message = fishermenName + '님의 미끼를 뱉었습니다!'; // 메시지 생성
+					openModal(message);
+					button.closest('tr').style.display = 'none';
+				},
+				error : function(xhr) {
+					alert('물고기가 미끼를 뱉는데 실패했습니다. 오류 코드: ' + xhr.status);
+				}
+			});
+		}
+
+		//먹기/뱉기 클릭 시 해당 행 삭제
+		function deleteLine(obj) {
+			var tr = $(obj).parent().parent();
+
+			//라인 삭제
+			tr.remove();
+		}
+	</script>
+	<footer th:replace="~{/include/footer :: footer}"></footer>
+</body>
+</html>
+
+
