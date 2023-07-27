@@ -86,14 +86,5 @@ public class AdminService implements IAdminService {
             }
         }
     }
-//    @Transactional
-//    public List<Map<String, Object>> getUserCountByGender() {
-//        return adminRepository.getUserCountByGender();
-//    }
-
-//    @Transactional
-//    public List<Map<String, Object>> getUserCountByGender() {
-//        return adminRepository.getUserCountByGender();
-//    }
 
 }

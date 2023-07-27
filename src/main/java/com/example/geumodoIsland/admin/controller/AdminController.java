@@ -45,6 +45,13 @@ public class AdminController {
 //        return "admin/admin-reports";
         return "admin/r-test";
     }
+    
+    @PostMapping("/reports/change-status")
+    public String changeReportStatus(@RequestParam int reportId, @RequestParam String reportStatus, RedirectAttributes redirectAttributes) {
+        adminService.changeReportStatus(reportId, reportStatus);
+        redirectAttributes.addFlashAttribute("message", "신고 처리 상태가 변경되었습니다.");
+        return "redirect:/admin/reports";
+    }
 
 
     @GetMapping("/submit")
@@ -90,7 +97,6 @@ public class AdminController {
         List<UserWithPhotos> allUsersWithPhotosFinal = new ArrayList<UserWithPhotos>();
         allUsersWithPhotos.stream().forEach((user) -> {
             List<UserPhotos> userPhotoFileNames = adminService.getAllUserWithPhotos(user.getUserId());
-
             UserWithPhotos userWithPhotos = UserWithPhotos.builder()
                     .userId(user.getUserId())
                     .userName(user.getUserName())
@@ -114,7 +120,6 @@ public class AdminController {
 
     @GetMapping("/notices")
     public String getNoticesForUser(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-
 
         String userIdInSession = String.valueOf(session.getAttribute("userId"));
 
