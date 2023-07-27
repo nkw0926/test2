@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="bodyHeader">
+	  <header>
+          <div class="navbar">
+            <div class="logo"><a href="/ocean/all">금오도</a></div>
+            <ul class="links">
+                <li><a th:href="@{/ocean/all}">바다</a></li>
+                <li><a th:href="@{/aquarium}">나의 아쿠아리움</a></li>
+                <li><a th:href="@{/baiting}">낚시 스토리</a></li>
+                <li><a th:href="@{/user/mypage}">마이페이지</a></li>
+                <li><a th:href="@{/admin/notices}">신고 알림</a></li>
+            </ul>
+            <div class="action_btn" onclick="changeMessage()">[[${userState}]]</div>
+            <div class="toggle_btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+
+        <div class="dropdown_menu">
+            <li><a th:href="@{/ocean/all}">바다</a></li>
+            <li><a th:href="@{/baiting}">낚시 스토리</a></li>
+            <li><a href="">마이페이지</a></li>
+            <li><a href="">신고 알림</a></li>
+            <li><div class="action_btn" onclick="changeMessage()">[[${userState}]]</div></li>
+        </div>
+    </header>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+    const changeMessage = () => {
+    	const userState = document.querySelector(".action_btn").innerText;
+		 $.ajax({
+				type: "post",
+				url: "./getUserState",
+				data: {
+					"userState": userState
+				},
+				success: function(res) {
+					var link = 'http://localhost:8080/user/login';
+					if(res == "로그인") {
+						location.replace(link);
+					} else {
+						alert("로그아웃되었습니다!");
+						location.replace(link);
+					}
+				},
+				error:function(request,status,error){
+			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			    }
+			})
+		}
+    </script>
+</div>
+</html>

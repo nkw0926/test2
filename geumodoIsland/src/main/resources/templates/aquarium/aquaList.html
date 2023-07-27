@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+</head>
+<body>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+<h1>아쿠아리움</h1>
+	<br><br><br>
+<div id="table-container">
+	<table class="aqua">
+		<caption>나의 아쿠아리움</caption>
+		<thead>
+			<tr>
+				<th>Aquarium ID</th>
+	            <th>Fishermen ID</th>
+	            <th>Fish ID</th>
+	            <th>이름</th>
+	            <th>출생년도</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="aquarium : ${aquariumList}">
+	            <td th:text="${aquarium.aquariumId}"></td>
+	            <td th:text="${aquarium.fishermenId}"></td>
+	            <td th:text="${aquarium.fishId}"></td>
+	            <td th:text="${aquarium.fishName}"></td>
+	            <td th:text="${aquarium.fishAge}"></td>
+	        </tr>
+		</tbody>
+	</table>
+</div>
+	
+	
+<footer th:replace="~{/include/footer :: footer}"></footer>
+</body>
+</html>
