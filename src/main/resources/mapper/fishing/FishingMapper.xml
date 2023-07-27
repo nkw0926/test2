@@ -26,5 +26,12 @@
         ]]>
     </select>
 
+    <select id="selectFishingStatusByUserId" parameterType="int">
+        <![CDATA[
+        SELECT fishing_id as FishingId, fishermen_id as fishermenId , fish_id as fishId, fishing_status as fishingStatus
+        FROM fishing
+        WHERE fishermen_id = #{userId}
 
+        ]]>
+    </select>
 </mapper>

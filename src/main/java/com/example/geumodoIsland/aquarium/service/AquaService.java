@@ -3,6 +3,8 @@ package com.example.geumodoIsland.aquarium.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.geumodoIsland.fishing.dao.IFishingRepository;
+import com.example.geumodoIsland.fishing.model.fishing;
 import com.example.geumodoIsland.fishing.service.IFishingService;
 import com.example.geumodoIsland.ocean.dao.IOceanRepository;
 import com.example.geumodoIsland.ocean.service.IOceanService;
@@ -22,7 +24,8 @@ public class AquaService implements IAquaService {
 
     @Autowired
     IFishingService fishingService;
-
+    @Autowired
+    IFishingRepository fishingRepository;
     //내 아쿠아리움 물고기 목록
     public List<Aquarium> showFishList(int fishermenId) {
         List<Aquarium> aquariumList = aquaRepository.showFishList(fishermenId);
@@ -77,5 +80,11 @@ public class AquaService implements IAquaService {
             return "해당 유저에게 미끼를 던진 과거 기록이 있습니다!";
         }
         return "/aquarium";
+    }
+
+    @Override
+    public fishing selectRowByUserId(int fishermenId) {
+
+        return fishingRepository.selectFishingStatusByUserId(fishermenId);
     }
 }

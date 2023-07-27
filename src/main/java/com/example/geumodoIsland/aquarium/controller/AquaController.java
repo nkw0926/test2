@@ -34,6 +34,11 @@ public class AquaController {
             return "redirect:/user/login";
         } else {
             int fishermenId = Integer.valueOf(userIdInSession);
+//           String fishingStatus = String.valueOf(aquaService.selectRowByUserId(fishermenId).getFishingStatus());
+//            if( fishingStatus.equals('W') || fishingStatus.equals('S')  ){
+//// 상태가
+//            }
+
             List<Aquarium> aquariumList = aquaService.showFishList(fishermenId);
 
             Date now = new Date();
