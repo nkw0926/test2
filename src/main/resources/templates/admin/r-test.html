@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head th:replace="~{/include/admin-header :: header}">
-
 <body>
 <div th:replace="~{/include/admin-body-header :: bodyHeader}"></div>
 
@@ -32,78 +31,86 @@
         </nav>
     </div>
     <div id="layoutSidenav_content">
-        <main>
-            <div class="container-fluid px-4">
-                <h1 class="mt-4">신고 처리 및 신고 내역 조회</h1>
-            </div>
-            <div class="pagetitle">
-                <h1 style="
-    margin-left: 130px;
-">All Reports</h1>
-            </div><!-- End Page Title -->
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">신고 처리 및 신고 내역 조회</h1>
+				</div>
+				<div class="pagetitle">
+					<h1 style="margin-left: 15%;">All Reports</h1>
+				</div>
+				<!-- End Page Title -->
 
-            <section class="section" style="padding-left: 15%;">
-                <div class="container"> <!-- container 추가 -->
-                    <div>
-                        <div class="col-lg-10"> <!-- 컬럼 크기 조절 -->
-                            <div class="card" style="width: max-content">
-                                <div class="card-body ml-30"> <!-- 왼쪽으로 3px만큼 이동 -->
+				<section class="section" style="padding-left: 15%;">
+					<div class="container">
+						<!-- container 추가 -->
+						<div>
+							<div class="col-lg-10">
+								<!-- 컬럼 크기 조절 -->
+								<div class="card" style="width: max-content">
+									<div class="card-body ml-30">
+										<!-- 왼쪽으로 3px만큼 이동 -->
 
-                                    <h5 class="card-title">Reports</h5>
-                                    <div style="font-size: 14px; color: blue;">[[${message}]]</div>
-                                    <!-- Table with stripped rows -->
-                                    <table class="table datatable">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col" data-sorter="numeric">#</th> <!-- 숫자로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Reporter ID</th> <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Target ID</th> <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Report Content</th>
-                                            <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Report Status</th> <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sortable="false" style="width: 23.940677966101696%;">
-                                                Action
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="report, reportStatus : ${reports}"> <!-- reportStatus 변수 사용 -->
-                                            <th scope="row" th:text="${reportStatus.count}"></th> <!-- 각 행 번호 표시 -->
-                                            <td th:text="${report.reporterId}"></td>
-                                            <td th:text="${report.targetId}"></td>
-                                            <td th:text="${report.reportContent}"></td>
-                                            <td th:text="${report.reportStatus}"></td>
-                                            <td> <!-- Action 열에 delete 버튼 추가 -->
-                                                <form th:action="@{/admin/reports/change-status}" method="post">
-                                                    <input type="hidden" name="reportId"
-                                                           th:value="${report.reportId}"> <select
-                                                        name="reportStatus" class="form-select">
-                                                    <option value="C" th:selected="${report.reportStatus == 'C'}">
-                                                        Complete
-                                                    </option>
-                                                    <option value="R" th:selected="${report.reportStatus == 'R'}">
-                                                        Receiving
-                                                    </option>
-                                                </select>
-                                                    <div class="input-group mt-2">
-                                                        <button class="btn btn-lg btn-primary w-90 fs-6 fw-bold"
-                                                                type="submit">Change Status
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- End Table with stripped rows -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+										<h5 class="card-title">Reports</h5>
+										<div style="font-size: 14px; color: blue;">[[${message}]]</div>
+										<!-- Table with stripped rows -->
+										<table class="table datatable">
+											<thead>
+												<tr>
+													<th scope="col" data-sorter="numeric">#</th>
+													<!-- 숫자로 정렬되도록 설정 -->
+													<th scope="col" data-sorter="text">Reporter ID</th>
+													<!-- 문자열로 정렬되도록 설정 -->
+													<th scope="col" data-sorter="text">Target ID</th>
+													<!-- 문자열로 정렬되도록 설정 -->
+													<th scope="col" data-sorter="text">Report Content</th>
+													<!-- 문자열로 정렬되도록 설정 -->
+													<th scope="col" data-sorter="text">Report Status</th>
+													<!-- 문자열로 정렬되도록 설정 -->
+													<th scope="col" data-sortable="false"
+														style="width: 23.940677966101696%;">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="report, reportStatus : ${reports}">
+													<!-- reportStatus 변수 사용 -->
+													<th scope="row" th:text="${reportStatus.count}"></th>
+													<!-- 각 행 번호 표시 -->
+													<td th:text="${report.reporterId}"></td>
+													<td th:text="${report.targetId}"></td>
+													<td th:text="${report.reportContent}"></td>
+													<td th:text="${report.reportStatus}"></td>
+													<td>
+														<!-- Action 열에 delete 버튼 추가 -->
+														<form th:action="@{/admin/reports/change-status}"
+															method="post">
+															<input type="hidden" name="reportId"
+																th:value="${report.reportId}"> <select
+																name="reportStatus" class="form-select">
+																<option value="C"
+																	th:selected="${report.reportStatus == 'C'}">
+																	Complete</option>
+																<option value="R"
+																	th:selected="${report.reportStatus == 'R'}">
+																	Receiving</option>
+															</select>
+															<div class="input-group mt-2">
+																<button class="btn btn-lg btn-primary w-90 fs-6 fw-bold"
+																	type="submit">Change Status</button>
+															</div>
+														</form>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<!-- End Table with stripped rows -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</main>
+			<!-- FOOTER -->
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
@@ -116,9 +123,9 @@
                 </div>
             </div>
         </footer>
+        <!-- FOOTER -->
     </div>
 </div>
-
 
 <!--여기 끝-->
 
