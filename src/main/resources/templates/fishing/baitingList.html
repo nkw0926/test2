@@ -9,6 +9,32 @@
 			<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 			<script
 				src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+			<script
+				src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+			<script type="text/javascript"
+				src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+			<script
+				src="https://cdnjs./cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+				crossorigin="anonymous"></script>
+			<script
+				src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+				crossorigin="anonymous"></script>
+			<script th:src="@{/admin/assets/js/scripts.js}" />
+			<script
+				src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+				crossorigin="anonymous"></script>
+			<!--<script th:src="@{/admin/assets/demo/chart-area-demo.js}"/>-->
+			<script type="text/javascript"
+				src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+			<!--<script th:src="@{/admin/assets/demo/chart-bar-demo.js}"/>-->
+			<script
+				src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+			<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+			<script
+				src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+			<script type="text/javascript"
+				th:src="@{/admin/assets/demo/datatables-demo.js}"></script>
+
 			<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 			<main id="main">
 				<div class="container-fluid px-4">
@@ -37,12 +63,10 @@
 														<th>이름</th>
 														<th>출생연도</th>
 														<th>낚시 상태</th>
-
+														<th>미끼 회수</th>
 													</tr>
 												</thead>
-
 												<tbody>
-
 													<tr th:each="baiting : ${baitingList}"
 														th:if="${baiting.baitingStatus == 'W'}">
 														<td th:text="${baiting.fishAddress}"></td>
@@ -52,7 +76,9 @@
 														<td th:if="${baiting.baitingStatus == 'W'}">대기</td>
 														<td th:if="${baiting.baitingStatus != 'W'}"
 															th:text="${baiting.baitingStatus}"></td>
-
+														<td>
+															<button class="btn-retrieve-baiting" th:data-baiting-id="${baiting.baitingId}" onclick="retrieveBaiting(event)">회수</button>
+														</td>
 													</tr>
 												</tbody>
 											</table>
@@ -65,7 +91,8 @@
 											<i class="fas fa-table me-1"></i> 나의 낚시 결과
 										</div>
 										<div class="card-body">
-											<table class="datatable table table-striped" style="width: 100%">
+											<table class="datatable table table-striped"
+												style="width: 100%">
 												<thead style="text-align: center;">
 													<tr>
 														<th>이름</th>
@@ -86,7 +113,8 @@
 															<button th:if="${baiting.baitingStatus == 'S'}"
 																th:data-fish-id="${baiting.fishId}"
 																class="btn-get-phone-number"
-																onclick="getPhoneNum(event)">전화번호 받기</button> <th:block th:if="${baiting.baitingStatus == 'F'}">전화번호는 다음 기회에~
+																onclick="getPhoneNum(event)">전화번호 받기</button> <th:block
+																th:if="${baiting.baitingStatus == 'F'}">전화번호는 다음 기회에~
 		                                            		</th:block>
 														</td>
 													</tr>
@@ -153,31 +181,7 @@
 		</div>
 		<footer th:replace="~{/include/footer :: footer}"></footer>
 	</div>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-	<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
-	<script
-		src="https://cdnjs./cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-		crossorigin="anonymous"></script>
-	<script th:src="@{/admin/assets/js/scripts.js}" />
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-		crossorigin="anonymous"></script>
-	<!--<script th:src="@{/admin/assets/demo/chart-area-demo.js}"/>-->
-	<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
-	<!--<script th:src="@{/admin/assets/demo/chart-bar-demo.js}"/>-->
-	<script
-		src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script
-		src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript"
-		th:src="@{/admin/assets/demo/datatables-demo.js}"></script>
+
 	<script>
 		$(document).ready(function() {
 			$('ul.tabs li').click(function() {
@@ -271,13 +275,26 @@
 			});
 		}
 
-		//먹기/뱉기 클릭 시 해당 행 삭제
-		/* function deleteLine(obj) {
-		    var tr = $(obj).parent().parent();
-
-		    //라인 삭제
-		    tr.remove();
-		} */
+		// 미끼 회수
+	    function retrieveBaiting(event) {
+	        if (event.target.classList.contains('btn-retrieve-baiting')) {
+	            var baitingId = event.target.getAttribute('data-baiting-id');
+	            if (confirm('정말로 미끼를 회수하시겠습니까? \n소모한 미끼는 반환되지 않습니다.')) {
+	                $.ajax({
+	                    url: '/baiting/delete/' + baitingId,
+	                    type: 'DELETE', // 삭제 요청을 위해 HTTP DELETE 메서드를 사용합니다.
+	                    success: function (response) {
+	                        var message = '미끼를 회수했습니다.'; // 회수 성공 메시지
+	                        openModal(message);
+	                        event.target.closest('tr').remove(); // 테이블에서 해당 행을 삭제합니다.
+	                    },
+	                    error: function (xhr) {
+	                        alert('미끼 회수에 실패했습니다. 오류 코드: ' + xhr.status);
+	                    }
+	                });
+	            }
+	        }
+	    }
 	</script>
 </body>
 

@@ -11,7 +11,7 @@ table {
 }
 
 th, td {
-	width: 25%; border : 1px solid black;
+	width: 20%; border : 1px solid black;
 	padding: 8px;
 	text-align: center;
 	color: black;
@@ -26,7 +26,7 @@ caption {
 	margin-bottom: 10px;
 }
 
-.btn-get-phone-number {
+.btn-get-phone-number, .btn-retrieve-baiting {
 	background-color: #4CAF50;
 	color: white;
 	padding: 8px 16px;
@@ -35,7 +35,7 @@ caption {
 	border-radius: 4px;
 }
 
-.btn-get-phone-number:hover {
+.btn-get-phone-number:hover, .btn-retrieve-baiting:hover{
 	background-color: #45a049;
 }
 

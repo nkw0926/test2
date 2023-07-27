@@ -12,4 +12,5 @@ public interface IBaitingService {
 	Integer getFishAge(int fishId); // 물고기 나이
 	void acceptBaiting(int baitingId); // 미끼를 먹은 경우 처리 메서드
 	void rejectBaiting(int baitingId); // 미끼를 먹은 경우 처리 메서드
+	void deleteBaiting(int baitingId); // 미끼 삭제
 }

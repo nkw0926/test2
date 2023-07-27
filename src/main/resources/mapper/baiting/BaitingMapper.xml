@@ -76,6 +76,14 @@
 	        SET fishing_status = 'F'
 	        WHERE fishing_id = #{baitingId}
 	    ]]>
-</update>
+	</update>
+	
+	<!-- 미끼 삭제 -->
+	<delete id="deleteBaiting" parameterType="int">
+	    <![CDATA[
+	        DELETE FROM fishing
+	        WHERE fishing_id = #{baitingId}
+	    ]]>
+	</delete>
 
 </mapper>
