@@ -1,6 +1,8 @@
 package com.example.geumodoIsland.ocean.service;
 
 
+import com.example.geumodoIsland.aquarium.controller.AquaController;
+import com.example.geumodoIsland.aquarium.service.IAquaService;
 import com.example.geumodoIsland.fishing.service.IFishingService;
 import com.example.geumodoIsland.ocean.dao.IOceanRepository;
 import com.example.geumodoIsland.user.model.User;
@@ -18,7 +20,10 @@ public class OceanService implements IOceanService {
     IOceanRepository oceanRepository;
     @Autowired
     IFishingService fishingService;
-
+    @Autowired
+    AquaController aquaController;
+    @Autowired
+    IAquaService aquaService;
     @Override
     public List<User> selectFishListByLocal(int userId) {
         return oceanRepository.selectFishListByLocal(userId);
@@ -79,6 +84,8 @@ public class OceanService implements IOceanService {
             }
             // 그 낚시 테이블에 정보 기록
             fishingService.insertFishingInfo(userIdInSession, targetUserId);
+            aquaService.deleteAqua(userIdInSession, targetUserId);
+//            aquaController.deleteAquarium(targetUserId, model, session);
             return "미끼를 성공적으로 던졌습니다! \n 물고기의 반응을 기다려주세요!";
 
         } else if (fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId) != 0) {

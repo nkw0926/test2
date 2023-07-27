@@ -7,7 +7,6 @@ import com.example.geumodoIsland.fishing.dao.IFishingRepository;
 import com.example.geumodoIsland.fishing.model.fishing;
 import com.example.geumodoIsland.fishing.service.IFishingService;
 import com.example.geumodoIsland.ocean.dao.IOceanRepository;
-import com.example.geumodoIsland.ocean.service.IOceanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,8 @@ public class AquaService implements IAquaService {
     IFishingService fishingService;
     @Autowired
     IFishingRepository fishingRepository;
+
+
     //내 아쿠아리움 물고기 목록
     public List<Aquarium> showFishList(int fishermenId) {
         List<Aquarium> aquariumList = aquaRepository.showFishList(fishermenId);
@@ -73,6 +74,7 @@ public class AquaService implements IAquaService {
             }
             // 그 낚시 테이블에 정보 기록
             fishingService.insertFishingInfo(userIdInSession, targetUserId);
+            deleteAqua(userIdInSession, targetUserId);
             return "미끼를 성공적으로 던졌습니다! \n 물고기의 반응을 기다려주세요!";
 
         } else if (fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId) != 0) {

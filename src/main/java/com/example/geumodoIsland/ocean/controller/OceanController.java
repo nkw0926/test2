@@ -182,6 +182,7 @@ public class OceanController {
         int userIdInSession = (int) session.getAttribute("userId");
         String throwBaitResult = oceanService.throwBait(userIdInSession, targetUserId);
         if (throwBaitResult.equals("/ocean/userDetail?userId=" + throwBaitResult)) {
+
             return "/ocean/userDetail?userId=" + throwBaitResult;
         } else {
             model.addAttribute("message", throwBaitResult);
