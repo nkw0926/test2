@@ -3,36 +3,69 @@
 <head th:replace="~{/include/header :: header}">
 </head>
 <body>
+<script src="http://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+
 <div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <h1>아쿠아리움</h1>
-	<br><br><br>
+<br><br><br>
 <div id="table-container">
-	<table class="aqua">
-		<caption>나의 아쿠아리움</caption>
-		<thead>
-			<tr>
-				<th>Aquarium ID</th>
-	            <th>Fishermen ID</th>
-	            <th>Fish ID</th>
-	            <th>이름</th>
-	            <th>출생년도</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="aquarium : ${aquariumList}">
-	            <td th:text="${aquarium.aquariumId}"></td>
-	            <td th:text="${aquarium.fishermenId}"></td>
-	            <td th:text="${aquarium.fishId}"></td>
-	            <td th:text="${aquarium.fishName}"></td>
-	            <td th:text="${aquarium.fishAge}"></td>
-	        </tr>
-		</tbody>
-	</table>
-</div>
-	
-	
-<footer th:replace="~{/include/footer :: footer}"></footer>
-<script src="http://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            나의 아쿠아리움
+        </div>
+        <div class="card-body">
+            <table class="datatable table table-striped" style="width:100%">
+                <thead style="text-align: center; width: 90vh">
+                <tr>
+                    <th style="width: 10px !important;">Aquarium ID</th>
+                    <th style="width: 10px !important;">Fishermen ID</th>
+                    <th style="width: 10px !important;">Fish ID</th>
+                    <th>이름</th>
+                    <th>출생년도</th>
+                    <th>뭐임</th>
+                    <th>뭐임</th>
 
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="aquarium : ${aquariumList}">
+                    <td th:text="${aquarium.aquariumId}"></td>
+                    <td th:text="${aquarium.fishermenId}"></td>
+                    <td th:text="${aquarium.fishId}"></td>
+                    <td th:text="${aquarium.fishName}"></td>
+                    <td th:text="${aquarium.fishAge}"></td>
+                    <td>  <button type="button" class="btn btn-danger">방생</button></td>
+                    <td>  <button type="button" class="btn btn-success">미끼던지기</button> </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<footer th:replace="~{/include/footer :: footer}"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+<script src="https://cdnjs./cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script th:src="@{/admin/assets/js/scripts.js}"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<!--<script th:src="@{/admin/assets/demo/chart-area-demo.js}"/>-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+<!--<script th:src="@{/admin/assets/demo/chart-bar-demo.js}"/>-->
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" th:src="@{/admin/assets/demo/datatables-demo.js}"></script>
 </body>
 </html>

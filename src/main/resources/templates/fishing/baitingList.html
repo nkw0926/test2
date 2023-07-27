@@ -58,36 +58,47 @@
                                 </div>
                             </div>
                             <div id="tab-2" class="tab-content">
-                                <table>
-                                    <caption>나의 낚시 결과</caption>
-                                    <thead style="text-align: center;">
-                                    <tr>
-                                        <th>이름</th>
-                                        <th>나이</th>
-                                        <th>낚시 상태</th>
-                                        <th>전화번호</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="baiting : ${baitingList}"
-                                        th:if="${baiting.baitingStatus == 'S' or baiting.baitingStatus == 'F'}">
-                                        <td th:text="${baiting.fishName}"></td>
-                                        <td th:text="${baiting.fishAge}"></td>
-                                        <td><span
-                                                th:text="${baiting.baitingStatus == 'S' ? '미끼를 물었어요!' : '물고기가 도망가버렸어요~'}"></span>
-                                        </td>
-                                        <td>
-                                            <button th:if="${baiting.baitingStatus == 'S'}"
-                                                    th:data-fish-id="${baiting.fishId}" class="btn-get-phone-number"
-                                                    onclick="getPhoneNum(event)">전화번호 받기
-                                            </button>
-                                            <th:block
-                                                    th:if="${baiting.baitingStatus == 'F'}">전화번호는 다음 기회에~
-                                            </th:block>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-table me-1"></i>
+                                       종료된 낚시 기록
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="datatable table table-striped" style="width:100%">
+                                            <thead style="text-align: center;">
+                                            <tr>
+                                                <th>이름</th>
+                                                <th>나이</th>
+                                                <th>낚시 상태</th>
+                                                <th>전화번호</th>
+
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                            <tr th:each="baiting : ${baitingList}"
+                                                th:if="${baiting.baitingStatus == 'S' or baiting.baitingStatus == 'F'}">
+                                                <td th:text="${baiting.fishName}"></td>
+                                                <td th:text="${baiting.fishAge}"></td>
+                                                <td><span
+                                                        th:text="${baiting.baitingStatus == 'S' ? '미끼를 물었어요!' : '물고기가 도망가버렸어요~'}"></span>
+                                                </td>
+                                                <td>
+                                                    <button th:if="${baiting.baitingStatus == 'S'}"
+                                                            th:data-fish-id="${baiting.fishId}" class="btn-get-phone-number"
+                                                            onclick="getPhoneNum(event)">전화번호 받기
+                                                    </button>
+                                                    <th:block
+                                                            th:if="${baiting.baitingStatus == 'F'}">전화번호는 다음 기회에~
+                                                    </th:block>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
                             <div id="tab-3" class="tab-content">
                                 <div class="card mb-4">
