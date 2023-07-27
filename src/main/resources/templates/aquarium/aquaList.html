@@ -21,7 +21,7 @@
                 <thead style="text-align: left; width: 90vh">
                 <tr>
                     <th>이름</th>
-                    <th>출생년도</th>
+                    <th>나이</th>
                     <th>방생</th>
                     <th>미끼던지기</th>
                 </tr>
@@ -32,8 +32,19 @@
                 <tr th:each="aquarium : ${aquariumList}">
                     <td th:text="${aquarium.fishName}" style="text-align: left;"></td>
                     <td th:text="${aquarium.fishAge}" style="text-align: left;"></td>
-                    <td style="text-align: left;">  <button type="button" class="btn btn-danger" >방생</button></td>
-                    <td style="text-align: left;">  <button type="button" class="btn btn-success">미끼던지기</button> </td>
+                    <td style="text-align: left;">
+                        <form id="freeFhisForm" action="/aquarium/delete/aquarium" method="post">
+                            <input type="hidden" name="targetUserId" th:value="${aquarium.fishId}">
+                            <input type="submit" class="btn btn-danger" value="방생">
+                        </form>
+                    </td>
+                    <td style="text-align: left;">
+                        <form id="throwBaitForm" action="/aquarium/minusBait" method="post">
+                            <input type="hidden" name="targetUserId" th:value="${aquarium.fishId}">
+                            <input type="submit" class="btn btn-success" value="미끼던지기">
+                        </form>
+
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -60,5 +71,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" th:src="@{/admin/assets/demo/datatables-demo.js}"></script>
+
+
 </body>
 </html>
