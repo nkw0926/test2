@@ -28,13 +28,9 @@ public interface IAdminRepository {
     void deletePhoto(int photoId); // 사진 삭제
 
     List<Notice> getNoticesByTargetId(int targetId);
+    List<Notice> getNoticesByReportId(int targetId);
     void saveNotice(Notice notice);
-
     void changeTargetStatus(int userId);
-
     void insertNotice(int userId);
-
-
-//List<Map<String, Object>> getUserCountByGender();
 
 }

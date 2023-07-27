@@ -2,8 +2,6 @@ package com.example.geumodoIsland.admin.service;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,6 +64,11 @@ public class AdminService implements IAdminService {
     public List<Notice> getNoticesByUserId(int userId) {
         return adminRepository.getNoticesByTargetId(userId);
     }
+    
+	@Override
+	public List<Notice> getNoticesByReportId(int userId) {
+		return adminRepository.getNoticesByReportId(userId);
+	}
 
     @Transactional
     public void saveNoticeFromReport(Report report) {
@@ -86,5 +89,6 @@ public class AdminService implements IAdminService {
             }
         }
     }
+
 
 }
