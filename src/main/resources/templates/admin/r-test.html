@@ -9,35 +9,33 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <div class="sb-sidenav-menu-heading">POSEIDON</div>
                     <a class="nav-link" href="/admin/main">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         사용자 통계
                     </a>
                     <a class="nav-link" href="/admin/reports">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        신고 처리 및 신고 내역
+                        신고 처리 및 알림 내역
                     </a>
                     <a class="nav-link" href="/admin/photos">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        사진 검열
+                        사용자 사진 검열
                     </a>
                 </div>
             </div>
             <div class="sb-sidenav-footer">
                 <div class="small">로그인한 사용자:</div>
-                금오도
+                POSEIDON
             </div>
         </nav>
     </div>
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">신고 처리 및 신고 내역 조회</h1>
+                <h1 class="mt-4">신고 처리 및 전체 내역 조회</h1>
             </div>
-            <div class="pagetitle">
-                <h1 style="margin-left: 15%;">모든 신고 내역</h1>
-            </div>
+          
             <!-- 페이지 제목 끝 -->
 
             <section class="section" style="padding-left: 15%;">
@@ -46,15 +44,16 @@
                     
                         <div class="col-lg-10">
                             <!-- 컬럼 크기 조절 -->
-                            <div class="card" style="width: max-content">
-                                <div class="card-body">
+                            <div class="card" style="width:1000px">
+                                <div class="card-body" style="width:1000px">
                                     <!-- 왼쪽으로 3px만큼 이동 -->
 
-                                    <h5 class="card-title">신고 내역</h5>
+                                    <h5 class="card-title">Reports</h5>
                                     <div style="font-size: 14px; color: blue;">[[${message}]]</div>
                                     <!-- 스타일이 적용된 메시지 출력 -->
                                     <!-- 행 간격이 적용된 테이블 -->
                                     <table class="table datatable">
+                                    
                                         <thead>
                                             <tr>
                                                 <th scope="col" data-sorter="numeric">#</th>
@@ -105,23 +104,21 @@
                 </div>
             </section>
         </main>
-        <!-- FOOTER -->
-        <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">저작권 &copy; 당신의 웹사이트 2021</div>
-                    <div>
-                        <a href="#">개인정보 처리방침</a>
-                        &middot;
-                        <a href="#">이용 약관</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- FOOTER -->
+       
     </div>
 </div>
-
+<footer class="py-4 bg-light mt-auto">
+			<div class="container-fluid px-4">
+				<div class="d-flex align-items-center justify-content-between small">
+					<div class="text-muted">Copyright &copy; GEUMODOISLAND</div>
+					<div>
+						<a href="#">Privacy Policy</a>
+						&middot;
+						<a href="#">Terms &amp; To Find Nimo</a>
+					</div>
+				</div>
+			</div>
+		</footer>
 <!-- 여기 끝 -->
 
 <!-- Vendor JS 파일 -->
