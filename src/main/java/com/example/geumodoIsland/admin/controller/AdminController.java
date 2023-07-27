@@ -45,7 +45,7 @@ public class AdminController {
 //        return "admin/admin-reports";
         return "admin/r-test";
     }
-    
+
     @PostMapping("/reports/change-status")
     public String changeReportStatus(@RequestParam int reportId, @RequestParam String reportStatus, RedirectAttributes redirectAttributes) {
         adminService.changeReportStatus(reportId, reportStatus);
@@ -82,6 +82,8 @@ public class AdminController {
         } else {
             int reporterId = (int) session.getAttribute("userId"); //나중에 이걸로!!
 //             int reporterId = 10; //임시로 지정
+            System.out.println("reporterId");
+            System.out.println(reporterId);
             // targetId, reporterId, reportContent를 사용하여 신고 기능 처리
             adminService.insertReport(targetId, reporterId, reportContent);
             model.addAttribute("message", "신고가 완료되었습니다.");
@@ -113,6 +115,8 @@ public class AdminController {
 
     @PostMapping("/photos/delete/{photoId}/{userId}")
     public String deletePhoto(@PathVariable int photoId, @PathVariable int userId, RedirectAttributes redirectAttributes) {
+       System.out.println("photoId " + photoId);
+        System.out.println("userId " + userId);
         adminService.deletePhoto(photoId, userId);
         redirectAttributes.addFlashAttribute("message", "사진이 삭제되었습니다.");
         return "redirect:/admin/photos";

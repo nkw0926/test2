@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head th:replace="~{/include/admin-header :: header}">
-
 <body>
 <div th:replace="~{/include/admin-body-header :: bodyHeader}"></div>
 
@@ -26,7 +25,7 @@
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Logged in as:</div>
+                <div class="small">로그인한 사용자:</div>
                 금오도
             </div>
         </nav>
@@ -37,92 +36,95 @@
                 <h1 class="mt-4">신고 처리 및 신고 내역 조회</h1>
             </div>
             <div class="pagetitle">
-                <h1 style="
-    margin-left: 130px;
-">All Reports</h1>
-            </div><!-- End Page Title -->
+                <h1 style="margin-left: 15%;">모든 신고 내역</h1>
+            </div>
+            <!-- 페이지 제목 끝 -->
 
             <section class="section" style="padding-left: 15%;">
-                <div class="container"> <!-- container 추가 -->
-                    <div>
-                        <div class="col-lg-10"> <!-- 컬럼 크기 조절 -->
+                <div class="container">
+                    <!-- 컨테이너 추가 -->
+                    
+                        <div class="col-lg-10">
+                            <!-- 컬럼 크기 조절 -->
                             <div class="card" style="width: max-content">
-                                <div class="card-body ml-30"> <!-- 왼쪽으로 3px만큼 이동 -->
+                                <div class="card-body">
+                                    <!-- 왼쪽으로 3px만큼 이동 -->
 
-                                    <h5 class="card-title">Reports</h5>
+                                    <h5 class="card-title">신고 내역</h5>
                                     <div style="font-size: 14px; color: blue;">[[${message}]]</div>
-                                    <!-- Table with stripped rows -->
+                                    <!-- 스타일이 적용된 메시지 출력 -->
+                                    <!-- 행 간격이 적용된 테이블 -->
                                     <table class="table datatable">
                                         <thead>
-                                        <tr>
-                                            <th scope="col" data-sorter="numeric">#</th> <!-- 숫자로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Reporter ID</th> <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Target ID</th> <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Report Content</th>
-                                            <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sorter="text">Report Status</th> <!-- 문자열로 정렬되도록 설정 -->
-                                            <th scope="col" data-sortable="false" style="width: 23.940677966101696%;">
-                                                Action
-                                            </th>
-                                        </tr>
+                                            <tr>
+                                                <th scope="col" data-sorter="numeric">#</th>
+                                                <!-- 숫자로 정렬되도록 설정 -->
+                                                <th scope="col" data-sorter="text">Reporter ID</th>
+                                                <!-- 문자열로 정렬되도록 설정 -->
+                                                <th scope="col" data-sorter="text">Target ID</th>
+                                                <!-- 문자열로 정렬되도록 설정 -->
+                                                <th scope="col" data-sorter="text">Report Content</th>
+                                                <!-- 문자열로 정렬되도록 설정 -->
+                                                <th scope="col" data-sorter="text" style="width: 25%;">Report Status</th>
+                                                <!-- 문자열로 정렬되도록 설정 -->
+                                                <th scope="col" data-sortable="false" style="width: 50%;">Action</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="report, reportStatus : ${reports}"> <!-- reportStatus 변수 사용 -->
-                                            <th scope="row" th:text="${reportStatus.count}"></th> <!-- 각 행 번호 표시 -->
-                                            <td th:text="${report.reporterId}"></td>
-                                            <td th:text="${report.targetId}"></td>
-                                            <td th:text="${report.reportContent}"></td>
-                                            <td th:text="${report.reportStatus}"></td>
-                                            <td> <!-- Action 열에 delete 버튼 추가 -->
-                                                <form th:action="@{/admin/reports/change-status}" method="post">
-                                                    <input type="hidden" name="reportId"
-                                                           th:value="${report.reportId}"> <select
-                                                        name="reportStatus" class="form-select">
-                                                    <option value="C" th:selected="${report.reportStatus == 'C'}">
-                                                        Complete
-                                                    </option>
-                                                    <option value="R" th:selected="${report.reportStatus == 'R'}">
-                                                        Receiving
-                                                    </option>
-                                                </select>
-                                                    <div class="input-group mt-2">
-                                                        <button class="btn btn-lg btn-primary w-90 fs-6 fw-bold"
-                                                                type="submit">Change Status
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
+                                            <tr th:each="report, reportStatus : ${reports}">
+                                                <!-- reportStatus 변수 사용 -->
+                                                <th scope="row" th:text="${reportStatus.count}"></th>
+                                                <!-- 각 행 번호 표시 -->
+                                                <td th:text="${report.reporterId}"></td>
+                                                <td th:text="${report.targetId}"></td>
+                                                <td th:text="${report.reportContent}"></td>
+                                                <td th:text="${report.reportStatus}"></td>
+                                                <td>
+                                                    <!-- 동작 열에 delete 버튼 추가 -->
+                                                    <form th:action="@{/admin/reports/change-status}" method="post">
+                                                        <input type="hidden" name="reportId" th:value="${report.reportId}">
+                                                        <select name="reportStatus" class="form-select">
+                                                            <option value="C" th:selected="${report.reportStatus == 'C'}">
+                                                                처리 완료</option>
+                                                            <option value="R" th:selected="${report.reportStatus == 'R'}">
+                                                                처리 중</option>
+                                                        </select>
+                                                        <div class="input-group mt-2">
+                                                            <button class="btn btn-lg btn-primary w-90 fs-6 fw-bold" type="submit">상태 변경</button>
+                                                        </div>
+                                                    </form>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
-                                    <!-- End Table with stripped rows -->
-                                </div>
+                                    <!-- 행 간격이 적용된 테이블 끝 -->
+                               
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-
         </main>
+        <!-- FOOTER -->
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2021</div>
+                    <div class="text-muted">저작권 &copy; 당신의 웹사이트 2021</div>
                     <div>
-                        <a href="#">Privacy Policy</a>
+                        <a href="#">개인정보 처리방침</a>
                         &middot;
-                        <a href="#">Terms &amp; Conditions</a>
+                        <a href="#">이용 약관</a>
                     </div>
                 </div>
             </div>
         </footer>
+        <!-- FOOTER -->
     </div>
 </div>
 
+<!-- 여기 끝 -->
 
-<!--여기 끝-->
-
-<!-- Vendor JS Files -->
+<!-- Vendor JS 파일 -->
 <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets/vendor/chart.js/chart.umd.js"></script>
@@ -132,7 +134,7 @@
 <script src="assets/vendor/tinymce/tinymce.min.js"></script>
 <script src="assets/vendor/php-email-form/validate.js"></script>
 
-<!-- Template Main JS File -->
+<!-- 템플릿 메인 JS 파일 -->
 <script src="assets/js/main.js"></script>
 
 </body>
