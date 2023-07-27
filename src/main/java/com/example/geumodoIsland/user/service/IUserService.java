@@ -1,9 +1,6 @@
 package com.example.geumodoIsland.user.service;
 
-import com.example.geumodoIsland.user.model.User;
-import com.example.geumodoIsland.user.model.UserIdAndPassword;
-import com.example.geumodoIsland.user.model.UserProfile;
-import com.example.geumodoIsland.user.model.UserUpdatePassword;
+import com.example.geumodoIsland.user.model.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,5 +25,6 @@ public interface IUserService {
     public Integer selectUserIdByUserEmail(String userEmail);
 
     void updateUserPassword(UserUpdatePassword userUpdatePassword);
+    List<UserBarChart> selectALLFishListBySexAddress();
 
 }
