@@ -11,6 +11,7 @@ import com.example.geumodoIsland.aquarium.model.Aquarium;
 @Repository
 @Mapper
 public interface IAquaRepository {
+	List<Aquarium> showFishList(int fishermenId); //아쿠아리움 물고기 목록
     List<String> selectFishList(int fishId);
     void deleteAqua(@Param("userId") int loginUserId,@Param("targetUserId") int targetUserId );
     int selectRowByUserIdTargetId(@Param("userId") int loginUserId, @Param("targetUserId") int targetUserId);
