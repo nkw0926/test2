@@ -47,6 +47,12 @@ public class BaitingService implements IBaitingService{
     }
 	 
 	@Override
+    public void deleteBaiting(int baitingId) {
+        baitingRepository.deleteBaiting(baitingId);
+    }
+
+	
+	@Override
 	public String getFishName(int fishId) {
 		return baitingRepository.getFishName(fishId);
 	}
