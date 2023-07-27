@@ -45,6 +45,13 @@ public class AdminController {
 //        return "admin/admin-reports";
         return "admin/r-test";
     }
+    
+    @PostMapping("/reports/change-status")
+    public String changeReportStatus(@RequestParam int reportId, @RequestParam String reportStatus, RedirectAttributes redirectAttributes) {
+        adminService.changeReportStatus(reportId, reportStatus);
+        redirectAttributes.addFlashAttribute("message", "신고 처리 상태가 변경되었습니다.");
+        return "redirect:/admin/reports";
+    }
 
 
     @GetMapping("/submit")
@@ -113,8 +120,8 @@ public class AdminController {
 
     @GetMapping("/notices")
     public String getNoticesForUser(Model model, HttpSession session) {
-        int userId = (int) session.getAttribute("userId"); //나중에 이걸로!!
-//       int userId = 2; //임시로 지정
+//        int userId = (int) session.getAttribute("userId"); //나중에 이걸로!!
+       int userId = 83; //임시로 지정
         List<Notice> notices = adminService.getNoticesByUserId(userId);
         Collections.sort(notices, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt())); //정렬
         adminService.setReportCreatedAtForNotices(notices); //reportCreatedAt 값을 notice의 createdAt으로 설정
