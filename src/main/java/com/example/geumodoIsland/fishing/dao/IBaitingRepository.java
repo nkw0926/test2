@@ -16,6 +16,7 @@ public interface IBaitingRepository {
 	Baiting findById(int fishId); // 물고기 아이디 조회
 	String getFishName(int fishId); //물고기 이름
 	Integer getFishAge(int fishId); // 물고기 나이
-	void updateBaitingStatusToS(int baitingId); // 미끼를 먹은 경우 처리 메서드
-	void updateBaitingStatusToF(int baitingId); // 미끼를 먹은 경우 처리 메서드
+	void updateBaitingStatusToS(int baitingId); // 미끼를 냠냠
+	void updateBaitingStatusToF(int baitingId); // 미끼를 퉤
+    void deleteBaiting(int baitingId); // 미끼 삭제
 }
