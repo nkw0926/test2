@@ -3,28 +3,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
         namespace="com.example.geumodoIsland.user.dao.IUserRepository">
-    <select id="selectAllFishList"
-            resultType="com.example.geumodoIsland.user.model.User">
-        <![CDATA[
-        SELECT user_id            AS "userId",
-               user_email         AS "userEmail",
-               user_name          AS "userName",
-               user_age           AS "userAge",
-               user_sex           AS "userSex",
-               user_address       AS "userAddress",
-               user_height        AS "userHeight",
-               user_body          AS "userBody",
-               user_phone_number  AS "userPhoneNumber",
-               user_password      AS "userPassword",
-               user_status        AS "userStatus",
-               user_job           AS "userJob",
-               user_hobbies       AS "userHobbies",
-               user_introductions AS "userIntroductions",
-               user_update_at     AS "userUpdateAt"
+<!--    <select id="selectAllFishList"-->
+<!--            resultType="com.example.geumodoIsland.user.model.User">-->
+<!--        <![CDATA[-->
+<!--        SELECT user_id            AS "userId",-->
+<!--               user_email         AS "userEmail",-->
+<!--               user_name          AS "userName",-->
+<!--               user_age           AS "userAge",-->
+<!--               user_sex           AS "userSex",-->
+<!--               user_address       AS "userAddress",-->
+<!--               user_height        AS "userHeight",-->
+<!--               user_body          AS "userBody",-->
+<!--               user_phone_number  AS "userPhoneNumber",-->
+<!--               user_password      AS "userPassword",-->
+<!--               user_status        AS "userStatus",-->
+<!--               user_job           AS "userJob",-->
+<!--               user_hobbies       AS "userHobbies",-->
+<!--               user_introductions AS "userIntroductions",-->
+<!--               user_update_at     AS "userUpdateAt"-->
 
-        FROM member
-        ]]>
-	</select>
+<!--        FROM member-->
+<!--        ]]>-->
+<!--	</select>-->
 
     <select id="selectAUserInfo" parameterType="int"
             resultType="com.example.geumodoIsland.user.model.User">
@@ -73,7 +73,7 @@
         WHERE user_address = #{loginUserAddress}
           and NOT user_sex IN (#{loginUserSex})
           and NOT user_id IN (#{userId})
-          and NOT user_status IN ('D')
+          and NOT user_status IN ('D','P')
         ]]>
     </select>
 
@@ -146,7 +146,7 @@
         </if>
         NOT user_sex IN (#{loginUserSex})
         and NOT user_id IN (#{loginUserId})
-        and NOT user_status IN ('D')
+        and NOT user_status IN ('D','P')
 
         <if test="locationList.size() != 0">
             and user_address IN
