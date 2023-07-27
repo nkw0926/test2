@@ -49,7 +49,7 @@
 		WHERE user_id = #{userId}
 		]]>
     </select>
-    
+
     <select id="selectFishListByAddress" parameterType="hashmap"
             resultType="com.example.geumodoIsland.user.model.User">
         <![CDATA[
@@ -73,35 +73,36 @@
         WHERE user_address = #{loginUserAddress}
           and NOT user_sex IN (#{loginUserSex})
           and NOT user_id IN (#{userId})
+          and NOT user_status IN ('D')
         ]]>
     </select>
-    
+
     <insert id="insertIntoUser" parameterType="com.example.geumodoIsland.user.model.User">
     	<selectKey keyProperty="userId" resultType="int" order="BEFORE">
     		SELECT MEMBER_SEQ.NEXTVAL FROM DUAL
     	</selectKey>
     	<![CDATA[
 	        INSERT INTO
-	        	member ( user_id, user_email, user_name, user_age, user_sex, user_address, 
+	        	member ( user_id, user_email, user_name, user_age, user_sex, user_address,
 	        	user_height, user_body, user_phone_number, user_password, user_job, user_hobbies, user_introductions , user_update_at)
 	        VALUES
         	(#{userId}, #{userEmail}, #{userName} , #{userAge}, #{userSex}, #{userAddress}, #{userHeight}, #{userBody},
         	#{userPhoneNumber}, #{userPassword}, #{userJob}, #{userHobbies}, #{userIntroductions}, SYSDATE)
         ]]>
     </insert>
-    
+
     <select id="emailCheck" parameterType="String" resultType="int">
     	<![CDATA[
     	SELECT COUNT(user_email) FROM member WHERE user_email = #{userEmail}
     	]]>
     </select>
-    
+
     <select id="selectUserIdByUserEmail" parameterType="String" resultType="Integer">
     	<![CDATA[
     	SELECT user_id FROM member WHERE user_email = #{userEmail}
     	]]>
     </select>
-    
+
     <select id="selectUserPasswordAndUserIdByUserEmail" parameterType="String" resultType="com.example.geumodoIsland.user.model.UserIdAndPassword">
     	<![CDATA[
     	SELECT user_id AS userId, user_password AS userPassword, user_status AS userStatus FROM member WHERE user_email = #{userEmail}
@@ -145,6 +146,7 @@
         </if>
         NOT user_sex IN (#{loginUserSex})
         and NOT user_id IN (#{loginUserId})
+        and NOT user_status IN ('D')
 
         <if test="locationList.size() != 0">
             and user_address IN
@@ -160,7 +162,7 @@
             </foreach>
         </if>
     </select>
-    
+
     <select id="selectUserProfileByUserId" parameterType="int"
             resultType="com.example.geumodoIsland.user.model.UserProfile">
         <![CDATA[
@@ -179,7 +181,7 @@
 			WHERE user_id = #{userId}
 		]]>
     </select>
-    
+
      <insert id="insertIntoBait" parameterType="com.example.geumodoIsland.user.model.UserBait">
     	<selectKey keyProperty="baitId" resultType="int" order="BEFORE">
     		SELECT BAIT_SEQ.NEXTVAL FROM DUAL
@@ -191,7 +193,7 @@
         	(#{baitId}, #{userId})
         ]]>
     </insert>
-    
+
     <update id="updateUserPassword" parameterType="com.example.geumodoIsland.user.model.UserUpdatePassword">
         <![CDATA[
         UPDATE member
