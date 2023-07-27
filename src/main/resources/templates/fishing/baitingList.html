@@ -5,132 +5,145 @@
 <body>
 <div id="body-wrapper" style="height: 100vh">
     <div id="body-content" style="height: auto; min-height: 100%; padding-bottom: 90px">
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-<div th:replace="~{/include/body-header :: bodyHeader}"></div>
-    <main id="main">
-        <section class="section site-portfolio">
-            <div class="container">
-                <h1>낚시 스토리</h1>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        나의 낚시 기록
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+        <div th:replace="~{/include/body-header :: bodyHeader}"></div>
+        <main id="main">
+            <div class="container-fluid px-4">
+                <section class="section site-portfolio">
+                    <h1>낚시 스토리</h1>
+                    <div class="container">
+
+                        <div class="container">
+                            <ul class="tabs">
+                                <li class="tab-link current" data-tab="tab-1">나의 낚시 기록</li>
+                                <li class="tab-link" data-tab="tab-2">나의 낚시 결과</li>
+                                <li class="tab-link" data-tab="tab-3">내게 온 미끼</li>
+                            </ul>
+
+                            <div id="tab-1" class="tab-content current">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-table me-1"></i>
+                                        나의 낚시 기록
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="datatable table table-striped" style="width:100%">
+                                            <thead style="text-align: center;">
+                                            <tr>
+                                                <th>지역</th>
+                                                <th>이름</th>
+                                                <th>나이</th>
+                                                <th>낚시 상태</th>
+
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                            <tr th:each="baiting : ${baitingList}"
+                                                th:if="${baiting.baitingStatus == 'W'}">
+                                                <td th:text="${baiting.fishAddress}"></td>
+                                                <td th:text="${baiting.fishName}"></td>
+                                                <td th:text="${baiting.fishAge}"></td>
+
+                                                <td th:if="${baiting.baitingStatus == 'W'}">대기</td>
+                                                <td th:if="${baiting.baitingStatus != 'W'}"
+                                                    th:text="${baiting.baitingStatus}"></td>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-content">
+                                <table>
+                                    <caption>나의 낚시 결과</caption>
+                                    <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>나이</th>
+                                        <th>낚시 상태</th>
+                                        <th>전화번호</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="baiting : ${baitingList}"
+                                        th:if="${baiting.baitingStatus == 'S' or baiting.baitingStatus == 'F'}">
+                                        <td th:text="${baiting.fishName}"></td>
+                                        <td th:text="${baiting.fishAge}"></td>
+                                        <td><span
+                                                th:text="${baiting.baitingStatus == 'S' ? '미끼를 물었어요!' : '물고기가 도망가버렸어요~'}"></span>
+                                        </td>
+                                        <td>
+                                            <button th:if="${baiting.baitingStatus == 'S'}"
+                                                    th:data-fish-id="${baiting.fishId}" class="btn-get-phone-number"
+                                                    onclick="getPhoneNum(event)">전화번호 받기
+                                            </button>
+                                            <th:block
+                                                    th:if="${baiting.baitingStatus == 'F'}">전화번호는 다음 기회에~
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="tab-3" class="tab-content">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-table me-1"></i>
+                                        내게 온 미끼
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="datatable table table-striped" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>이름</th>
+                                                    <th>나이</th>
+                                                    <th>먹기/뱉기
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="baiting : ${baitedList}"
+                                                    th:if="${baiting.baitingStatus == 'W'}">
+                                                    <td th:text="${baiting.fishermenName}"></td>
+                                                    <td th:text="${baiting.fishermenAge}"></td>
+                                                    <td>
+                                                        <button class="accept" th:data-baiting-id="${baiting.baitingId}"
+                                                                onclick="acceptBaiting(event); deleteLine(this);">
+                                                            <span class="btn-text">먹기</span> <span class="heart-icon"></span>
+                                                        </button>
+                                                        <button class="reject" th:data-baiting-id="${baiting.baitingId}"
+                                                                onclick="rejectBaiting(event); deleteLine(this);">
+                                                            <span class="btn-text">뱉기</span> <span class="heart-icon-crack"></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-container" id="custom-modal">
+                            <div class="modal-content">
+                                <span class="close-btn" onclick="closeModal()">&times;</span>
+                                <p id="modal-message"></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <table id="datatable" class="table table-striped" style="width:100%">
-                            <thead>
-                            <tr>
-                                <th>지역</th>
-                                <th>신장</th>
-                                <th>몸</th>
-                                <th>이름</th>
-                                <th>출생년도</th>
-                                <th>낚시 상태</th>
-                            </tr>
-                            </thead>
-                            <tfoot>
-                            <tr>
-                                <th>지역</th>
-                                <th>신장</th>
-                                <th>몸</th>
-                                <th>이름</th>
-                                <th>출생년도</th>
-                                <th>낚시 상태</th>
-                            </tr>
-                            </tfoot>
-                            <tbody>
-
-                            <tr th:each="baiting : ${baitingList}" th:if="${baiting.baitingStatus == 'W'}">
-                                <td th:text="${baiting.fishAddress}"></td>
-                                <td th:text="${baiting.fishHeight}"></td>
-                                <td th:text="${baiting.fishBody}"></td>
-                                <td th:text="${baiting.fishName}"></td>
-                                <td th:text="${baiting.fishAge}"></td>
-                                <td><span th:if="${baiting.baitingStatus == 'W'}">밑밥
-							뿌리는 중...</span> <span th:if="${baiting.baitingStatus != 'W'}"
-                                                  th:text="${baiting.baitingStatus}"></span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-
-                <table>
-                    <caption>나의 낚시 결과</caption>
-                    <thead>
-                    <tr>
-                        <th>이름</th>
-                        <th>출생년도</th>
-                        <th>낚시 상태</th>
-                        <th>전화번호</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="baiting : ${baitingList}"
-                        th:if="${baiting.baitingStatus == 'S' or baiting.baitingStatus == 'F'}">
-                        <td th:text="${baiting.fishName}"></td>
-                        <td th:text="${baiting.fishAge}"></td>
-                        <td><span
-                                th:text="${baiting.baitingStatus == 'S' ? '미끼를 물었어요!' : '물고기가 도망가버렸어요~'}"></span>
-                        </td>
-                        <td>
-                            <button th:if="${baiting.baitingStatus == 'S'}"
-                                    th:data-fish-id="${baiting.fishId}" class="btn-get-phone-number"
-                                    onclick="getPhoneNum(event)">전화번호 받기
-                            </button>
-                            <th:block
-                                    th:if="${baiting.baitingStatus == 'F'}">전화번호는 다음 기회에~
-                            </th:block>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <div class="modal-container" id="custom-modal">
-                    <div class="modal-content">
-                        <span class="close-btn" onclick="closeModal()">&times;</span>
-                        <p id="modal-message"></p>
-                    </div>
-                </div>
-                <table>
-                    <caption>내게 온 미끼</caption>
-                    <thead>
-                    <tr>
-                        <th>이름</th>
-                        <th>출생년도</th>
-                        <th>먹기/뱉기
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="baiting : ${baitedList}"
-                        th:if="${baiting.baitingStatus == 'W'}">
-                        <td th:text="${baiting.fishermenName}"></td>
-                        <td th:text="${baiting.fishermenAge}"></td>
-                        <td>
-                            <button class="accept" th:data-baiting-id="${baiting.baitingId}"
-                                    onclick="acceptBaiting(event); deleteLine(this);">
-                                <span class="btn-text">먹기</span> <span class="heart-icon"></span>
-                            </button>
-                            <button class="reject" th:data-baiting-id="${baiting.baitingId}"
-                                    onclick="rejectBaiting(event); deleteLine(this);">
-                                <span class="btn-text">뱉기</span> <span class="heart-icon-crack"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
+                </section>
             </div>
-        </section>
-    </main>
+        </main>
 
-<br>
+        <br>
     </div>
-<footer th:replace="~{/include/footer :: footer}"></footer>
+    <footer th:replace="~{/include/footer :: footer}"></footer>
 </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
 <script src="https://cdnjs./cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
         crossorigin="anonymous"></script>
@@ -144,8 +157,24 @@
 <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
+<script type="text/javascript" th:src="@{/admin/assets/demo/datatables-demo.js}"></script>
 <script>
+    $(document).ready(function () {
+        $('ul.tabs li').click(function () {
+            var tab_id = $(this).attr('data-tab');
+
+            $('ul.tabs li').removeClass('current');
+            $('.tab-content').removeClass('current');
+
+            $(this).addClass('current');
+            $("#" + tab_id).addClass('current');
+        });
+
+        $('.datatable').DataTable();
+
+    });
+
+
     // 모달 열기
     function openModal(message) {
         const modalContainer = document.getElementById('custom-modal');

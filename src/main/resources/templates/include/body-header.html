@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="bodyHeader">
-	  <header>
+    <header>
 
-          <meta charset="utf-8">
-          <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-          <title>MyPortfolio Bootstrap Template - Index</title>
-          <meta content="" name="description">
-          <meta content="" name="keywords">
+        <title>MyPortfolio Bootstrap Template - Index</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
 
-          <!-- Favicons -->
-          <link href="assets/img/favicon.png" rel="icon">
-          <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+        <!-- Favicons -->
+        <link href="assets/img/favicon.png" rel="icon">
+        <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-          <!-- Google Fonts -->
-          <link href="https://fonts.googleapis.com/css?family=https://fonts.googleapis.com/css?family=Inconsolata:400,500,600,700|Raleway:400,400i,500,500i,600,600i,700,700i"
-                rel="stylesheet">
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=https://fonts.googleapis.com/css?family=Inconsolata:400,500,600,700|Raleway:400,400i,500,500i,600,600i,700,700i"
+              rel="stylesheet">
 
-          <!-- Vendor CSS Files -->
-          <link href="/ocean/assets/vendor/aos/aos.css" rel="stylesheet">
-          <link href="/ocean/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-          <link href="/ocean/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-          <link href="/ocean/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+        <!-- Vendor CSS Files -->
+        <link href="/ocean/assets/vendor/aos/aos.css" rel="stylesheet">
+        <link href="/ocean/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/ocean/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+        <link href="/ocean/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-          <!-- Template Main CSS File -->
-          <link href="/ocean/assets/css/style.css" rel="stylesheet">
+        <!-- Template Main CSS File -->
+        <link href="/ocean/assets/css/style.css" rel="stylesheet">
 
-          <div class="navbar">
+        <div class="navbar">
             <div class="logo"><a href="/ocean/all">금오도</a></div>
             <ul class="links">
-                 <li><a th:href="@{/ocean/all}">바다</a></li>
+                <li><a th:href="@{/ocean/all}">바다</a></li>
+                <li><a th:href="@{/aquarium}">아쿠아리움</a></li>
                 <li><a th:href="@{/baiting}">낚시 스토리</a></li>
                 <li><a th:href="@{/user/mypage}">마이페이지</a></li>
                 <li><a th:href="@{/admin/notices}">신고 알림</a></li>
@@ -42,36 +43,39 @@
         </div>
 
         <div class="dropdown_menu">
-          <li><a th:href="@{/ocean/all}">바다</a></li>
+            <li><a th:href="@{/ocean/all}">바다</a></li>
+            <li><a th:href="@{/aquarium}">아쿠아리움</a></li>
             <li><a th:href="@{/baiting}">낚시 스토리</a></li>
             <li><a th:href="@{/user/mypage}">마이페이지</a></li>
             <li><a th:href="@{/admin/notices}">신고 알림</a></li>
-            <li><div class="action_btn" onclick="changeMessage()">[[${userState}]]</div></li>
+            <li>
+                <div class="action_btn" onclick="changeMessage()">[[${userState}]]</div>
+            </li>
         </div>
     </header>
     <script type="text/javascript">
-    const changeMessage = () => {
-    	const userState = document.querySelector(".action_btn").innerText;
-		 $.ajax({
-				type: "post",
-				url: "./getUserState",
-				data: {
-					"userState": userState
-				},
-				success: function(res) {
-					var link = 'http://localhost:8080/user/login';
-					if(res == "로그인") {
-						location.replace(link);
-					} else {
-						alert("로그아웃되었습니다!");
-						location.replace(link);
-					}
-				},
-				error:function(request,status,error){
-			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			    }
-			})
-		}
+        const changeMessage = () => {
+            const userState = document.querySelector(".action_btn").innerText;
+            $.ajax({
+                type: "post",
+                url: "./getUserState",
+                data: {
+                    "userState": userState
+                },
+                success: function (res) {
+                    var link = 'http://localhost:8080/user/login';
+                    if (res == "로그인") {
+                        location.replace(link);
+                    } else {
+                        alert("로그아웃되었습니다!");
+                        location.replace(link);
+                    }
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        }
     </script>
 </div>
 </html>

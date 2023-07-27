@@ -119,15 +119,24 @@ public class AdminController {
     }
 
     @GetMapping("/notices")
-    public String getNoticesForUser(Model model, HttpSession session) {
-//        int userId = (int) session.getAttribute("userId"); //나중에 이걸로!!
-       int userId = 83; //임시로 지정
-        List<Notice> notices = adminService.getNoticesByUserId(userId);
-        Collections.sort(notices, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt())); //정렬
-        adminService.setReportCreatedAtForNotices(notices); //reportCreatedAt 값을 notice의 createdAt으로 설정
-        model.addAttribute("notices", notices);
+    public String getNoticesForUser(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+
+        String userIdInSession = String.valueOf(session.getAttribute("userId"));
+
+        if (userIdInSession == "null") {
+            redirectAttributes.addFlashAttribute("userState", "로그인");
+            return "redirect:/user/login";
+        } else {
+            int userId = Integer.valueOf(userIdInSession);
+            List<Notice> notices = adminService.getNoticesByUserId(userId);
+            Collections.sort(notices, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt())); //정렬
+            adminService.setReportCreatedAtForNotices(notices); //reportCreatedAt 값을 notice의 createdAt으로 설정
+            model.addAttribute("notices", notices);
+            model.addAttribute("userState", "로그아웃");
 //        return "admin/admin-notices";
-        return "admin/n-test";
+            return "admin/n-test";
+        }
     }
 
 
@@ -156,7 +165,7 @@ public class AdminController {
                 lateThirties++;
             } else {
                 old++;
-                //DB에 값 이상하게 들어가있다 나이는 출생년도로 다 바꿔
+                //DB에 값 이상하게 들어가있다 나이는 나이로 다 바꿔
             }
         }
 
@@ -248,7 +257,7 @@ public class AdminController {
                 } else {
                     oldMCount++;
                 }
-                //DB에 값 이상하게 들어가있다 나이는 출생년도로 다 바꿔
+                //DB에 값 이상하게 들어가있다 나이는 나이로 다 바꿔
             }
         }
 
