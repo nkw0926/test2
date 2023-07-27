@@ -63,7 +63,7 @@
                     "userState": userState
                 },
                 success: function (res) {
-                    var link = 'http://localhost:8080/user/login';
+                    var link = 'http://' + window.location.host  + '/user/login';
                     if (res == "로그인") {
                         location.replace(link);
                     } else {
