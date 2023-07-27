@@ -41,7 +41,7 @@
 	<insert id="insertNotice" parameterType="int">
 	 <![CDATA[
 	    INSERT INTO report ( report_id, reporter_id, target_id, report_content, created_at, report_status)
-	    VALUES (report_seq.NEXTVAL, 10, #{userId}, '프로필 사진 삭제' , sysdate, 'C')
+	    VALUES (report_seq.NEXTVAL, #{reporterId}, #{userId}, '프로필 사진 삭제' , sysdate, 'C')
 	     ]]>
 	</insert>
 
