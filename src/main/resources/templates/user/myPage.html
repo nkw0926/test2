@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}">
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+</head>
+<body>
+ 	<div th:replace="~{/include/body-header :: bodyHeader}"></div>
+    <div class="container mt-5">
+        <h1>마이페이지</h1>
+        <div class="col d-flex">
+           <div class="col">
+        	 <div class="row mt-4">
+		            <div class="col-md-6">
+		                <p><strong>이름:</strong> <span th:text="${userProfile.userName}"></span></p>
+		                <p><strong>이메일:</strong> <span th:text="${userProfile.userEmail}"></span></p>
+		                <p><strong>나이:</strong> <span th:text="${userProfile.userAge}"></span></p>
+		                <p><strong>성별:</strong> <span th:text="${userProfile.userSex}"></span></p>
+		                <p><strong>키:</strong> <span th:text="${userProfile.userHeight}"></span></p>
+		                <p><strong>체형:</strong> <span th:text="${userProfile.userBody}"></span></p>
+		            </div>
+		        </div>
+		        <div class="row mt-4 mb-4">
+		            <div class="col-md-6">
+		                <p><strong>주소:</strong> <span th:text="${userProfile.userAddress}"></span></p>
+		                <p><strong>전화번호:</strong> <span th:text="${userProfile.userPhoneNumber}"></span></p>
+		                <p><strong>직업:</strong> <span th:text="${userProfile.userJob}"></span></p>
+		                <p><strong>취미:</strong> <span th:text="${userProfile.userHobbies}"></span></p>
+		                <p><strong>한줄소개:</strong> <span th:text="${userProfile.userIntroductions}"></span></p>
+		            </div>
+		        </div>
+	        </div>
+	        <p><strong>프로필 사진:</strong></p>
+	        <div class="col" style="display:flex; margin-left:10px">
+		        <div class="col-md-6" th:each="userPhoto : ${userProfile.userPhotoFileNames}">
+		        	<img th:src="@{/ocean/assets/img/userImg/{userEmail}/{userPhotoFileName}(userEmail=${userProfile.userEmail},userPhotoFileName=${userPhoto.photoFileName})}"
+		        	class="img-fluid rounded-circle" alt="프로필 사진" style="width:200px; height:180px">
+		        </div>
+	        </div>
+        </div>
+        <a th:href="@{/user/mypage/update/{userId}(userId=${userId})}" type="button" class="btn btn-info" style="margin-bottom:20px; background:brown; color:white; border:none; font-weight:bold">수정하기</a>
+    </div>
+    <footer th:replace="~{/include/footer :: footer}"></footer>
+</body>
+</html>

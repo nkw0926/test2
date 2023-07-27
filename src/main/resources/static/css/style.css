@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+html, body {
+    height: 100vh;
+    background-color: #f6f9ff;
+    /*background-image: url("/assets/img/beach.jpg");*/
+    background-size: cover;
+    background-position: center;
+}
+
+
