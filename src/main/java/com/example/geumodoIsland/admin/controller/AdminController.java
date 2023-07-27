@@ -45,7 +45,7 @@ public class AdminController {
 //        return "admin/admin-reports";
         return "admin/r-test";
     }
-    
+
     @PostMapping("/reports/change-status")
     public String changeReportStatus(@RequestParam int reportId, @RequestParam String reportStatus, RedirectAttributes redirectAttributes) {
         adminService.changeReportStatus(reportId, reportStatus);
@@ -115,6 +115,8 @@ public class AdminController {
 
     @PostMapping("/photos/delete/{photoId}/{userId}")
     public String deletePhoto(@PathVariable int photoId, @PathVariable int userId, RedirectAttributes redirectAttributes) {
+       System.out.println("photoId " + photoId);
+        System.out.println("userId " + userId);
         adminService.deletePhoto(photoId, userId);
         redirectAttributes.addFlashAttribute("message", "사진이 삭제되었습니다.");
         return "redirect:/admin/photos";
