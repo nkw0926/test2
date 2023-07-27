@@ -178,45 +178,13 @@ public class OceanController {
     public String minusBait( @RequestParam int targetUserId, Model model, HttpSession session) {
         // 해당 유저 가용 미끼 있는지 확인
         int userIdInSession = (int) session.getAttribute("userId");
-
-
-
-
-
-        if (oceanService.selectCountAllBait(userIdInSession) == null) {
-            // 가용 미끼 없으면?
-            // 가용 미끼가 존재하지 않습니다!
-            model.addAttribute("message", "가용 미끼가 존재하지 않습니다!");
-            model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
-            return "ocean/message";
-        } else if (  oceanService.selectCountAllBait(userIdInSession).equals(0) ) {
-            model.addAttribute("message", "가용 미끼가 존재하지 않습니다!");
-            model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
-            return "ocean/message";
-
-        } else if (oceanService.selectCountAllBait(userIdInSession) != null && Integer.parseInt(oceanService.selectCountAllBait(userIdInSession).toString()) > 0 && fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId) == 0) {
-            // 가용 미끼가 있으면  무료 미끼 먼저 소진
-            //무료 미끼 있냐?
-            if (oceanService.selectCountFreeBait(userIdInSession) > 0) {
-                // 무료 미끼 있으면
-                // 무료미끼 하나 삭제
-                oceanService.minusFreeBait(userIdInSession);
-            } else {
-                // 무료미끼 없으면 유료미끼 하나 삭제
-                oceanService.minusNotFreeBait(userIdInSession);
-            }
-            // 그 낚시 테이블에 정보 기록
-            fishingService.insertFishingInfo(userIdInSession, targetUserId);
-            model.addAttribute("message", "미끼를 성공적으로 던졌습니다! \n 물고기의 반응을 기다려주세요!");
-            model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
-            return "ocean/message";
-
-        } else if (fishingService.seclectRowByUserIdTargetId(userIdInSession, targetUserId) != 0) {
-            //이미 그 물고기에게 미끼를 던졌으면?
-            model.addAttribute("message", "해당 유저에게 미끼를 던진 과거 기록이 있습니다!");
+        String throwBaitResult =oceanService.throwBait(userIdInSession, targetUserId);
+        if( throwBaitResult.equals( "/ocean/userDetail?userId=" + throwBaitResult)){
+            return "/ocean/userDetail?userId=" + throwBaitResult;
+        }else{
+            model.addAttribute("message", throwBaitResult);
             model.addAttribute("searchUrl", "/ocean/userDetail?userId=" + targetUserId);
             return "ocean/message";
         }
-        return "/ocean/userDetail?userId=" + targetUserId;
     }
 }
