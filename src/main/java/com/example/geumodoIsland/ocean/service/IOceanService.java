@@ -16,4 +16,5 @@ public interface IOceanService {
     void minusNotFreeBait(int loginUserId);
     void minusFreeBait(int loginUserId);
     void resetFreeBait();
+    public String throwBait(int userIdInSession, int targetUserId) ;
 }
