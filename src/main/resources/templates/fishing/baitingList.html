@@ -16,8 +16,8 @@
 
                         <div class="container">
                             <ul class="tabs">
-                                <li class="tab-link current" data-tab="tab-1">나의 낚시 기록</li>
-                                <li class="tab-link" data-tab="tab-2">나의 낚시 결과</li>
+                                <li class="tab-link current" data-tab="tab-1">진행중인 낚시 기록</li>
+                                <li class="tab-link" data-tab="tab-2">종료된 낚시 기록</li>
                                 <li class="tab-link" data-tab="tab-3">내게 온 미끼</li>
                             </ul>
 
@@ -97,30 +97,32 @@
                                     </div>
                                     <div class="card-body">
                                         <table class="datatable table table-striped" style="width:100%">
-                                                <thead>
-                                                <tr>
-                                                    <th>이름</th>
-                                                    <th>나이</th>
-                                                    <th>먹기/뱉기
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="baiting : ${baitedList}"
-                                                    th:if="${baiting.baitingStatus == 'W'}">
-                                                    <td th:text="${baiting.fishermenName}"></td>
-                                                    <td th:text="${baiting.fishermenAge}"></td>
-                                                    <td>
-                                                        <button class="accept" th:data-baiting-id="${baiting.baitingId}"
-                                                                onclick="acceptBaiting(event); deleteLine(this);">
-                                                            <span class="btn-text">먹기</span> <span class="heart-icon"></span>
-                                                        </button>
-                                                        <button class="reject" th:data-baiting-id="${baiting.baitingId}"
-                                                                onclick="rejectBaiting(event); deleteLine(this);">
-                                                            <span class="btn-text">뱉기</span> <span class="heart-icon-crack"></span>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
+                                            <thead>
+                                            <tr>
+                                                <th>이름</th>
+                                                <th>나이</th>
+                                                <th>먹기/뱉기
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="baiting : ${baitedList}"
+                                                th:if="${baiting.baitingStatus == 'W'}">
+                                                <td th:text="${baiting.fishermenName}"></td>
+                                                <td th:text="${baiting.fishermenAge}"></td>
+                                                <td>
+                                                    <button class="accept" th:data-baiting-id="${baiting.baitingId}"
+                                                            onclick="acceptBaiting(event); deleteLine(this);">
+                                                        <span class="btn-text">먹기</span> <span
+                                                            class="heart-icon"></span>
+                                                    </button>
+                                                    <button class="reject" th:data-baiting-id="${baiting.baitingId}"
+                                                            onclick="rejectBaiting(event); deleteLine(this);">
+                                                        <span class="btn-text">뱉기</span> <span
+                                                            class="heart-icon-crack"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
 
                                         </table>
                                     </div>
