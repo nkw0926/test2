@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public class Aquarium {
-	private int aquarium_id;
-	private int fishermen_id;
-	private int fish_id;
+	private int aquariumId;
+	private int fishermenId;
+	private int fishId;
+	private String fishName;
+	private int fishAge;
 }

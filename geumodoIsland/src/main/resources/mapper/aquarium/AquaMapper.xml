@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.geumodoIsland.aquarium.dao.IAquaRepository">
+
+	<!-- 내 아쿠아리움 출력 -->
+	<select id="showFishList" parameterType="int" resultType="com.example.geumodoIsland.aquarium.model.Aquarium">
+	<![CDATA[
+		SELECT
+			a.aquarium_id			AS "aquariumId",
+			a.fishermen_id			AS "fishermenId",
+			a.fish_id				AS "fishId",
+			m.user_name				AS "fishName",
+			m.user_age				AS "fishAge"
+		FROM aquarium a
+		JOIN member m ON a.fish_id = m.user_id
+		WHERE a.fishermen_id = #{fishermenId}
+	]]>
+	</select>
+	
     <select id="selectFishList" parameterType="hashmap" resultType="com.example.geumodoIsland.aquarium.model.Aquarium">
 	<![CDATA[
         SELECT aquarium_id  AS "aquariumId",

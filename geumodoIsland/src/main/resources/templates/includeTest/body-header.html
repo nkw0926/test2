@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Body Header -->
+<div th:fragment="bodyHeader">
+	  <header>
+        <div class="navbar">
+            <div class="logo"><a href="#">금오도</a></div>
+            <ul class="links">
+                <li><a href="/ocean/all">바다</a></li>
+                <li><a href="/fishing/baitingList">낚시 스토리</a></li>
+                <li><a href="">미끼 설정</a></li>
+                <li><a href="">환경 설정</a></li>
+            </ul>
+            <a href="#" class="action_btn">로그인</a>
+            <div class="toggle_btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+
+        <div class="dropdown_menu">
+            <li><a href="/ocean/all">바다</a></li>
+            <li><a href="/fishing/baitingList">낚시 스토리</a></li>
+            <li><a href="">미끼 설정</a></li>
+            <li><a href="">환경 설정</a></li>
+            <li><a href="#" class="action_btn">로그인</a></li>
+        </div>
+    </header>
+</div>
+</html>
