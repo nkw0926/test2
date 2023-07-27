@@ -358,6 +358,7 @@ public class UserController {
 		hobbies.add("공예,만들기");
 		hobbies.add("맛집 탐방");
 		model.addAttribute("hobbies", hobbies);
+		model.addAttribute("userState", "로그아웃");
 		return "user/myPageUpdate";
 	}
 

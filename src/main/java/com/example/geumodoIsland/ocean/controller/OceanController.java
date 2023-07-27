@@ -123,6 +123,7 @@ public class OceanController {
     @GetMapping(value = "/userDetail")
     public String selectAUserInfo(@RequestParam("userId") int userId, Model model) {
         int loginUserId = 6;
+        model.addAttribute("userState", "로그아웃");
 
         Map<String, Object> AUserInfo = userService.selectAUserInfo(userId);
         List<String> userPhotoName = photoService.selectUserPhoto(userId);

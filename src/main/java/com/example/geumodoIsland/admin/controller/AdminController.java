@@ -61,6 +61,7 @@ public class AdminController {
         reportContents.add("불법적인 활동 진행으로 신고");
         model.addAttribute("reportContents", reportContents);
         model.addAttribute("targetId", targetId);
+        model.addAttribute("userState", "로그아웃");
 //        return "admin/submit";
         return "admin/s-test";
     }
@@ -273,5 +274,17 @@ public class AdminController {
         sexCountList.add(maleCountList);
         return sexCountList;
     }
+    
+    // 로그인, 로그아웃 처리
+ 	@PostMapping("/getUserState")
+ 	public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
+ 		System.out.println(userState);
+ 		if (userState.equals("로그인")) {
+ 			return "로그인";
+ 		} else {
+ 			session.invalidate();
+ 			return "로그아웃";
+ 		}
+ 	}
 }
 
