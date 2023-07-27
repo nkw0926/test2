@@ -239,7 +239,7 @@ public class UserController {
 			photoFileNames.add(photoFileName);
 
 			MultipartFile file = files.get(i);
-			String savePath = "C:/Users/KOSA/git/Ocean/geumodoIsland/src/main/resources/static/ocean/assets/img/userImg/" + userEmail;
+			String savePath = "C:/Users/KOSA/git/geumodoIsland2/src/main/resources/static/ocean/assets/img/userImg/" + userEmail;
 			try {
 				File rootFile = new File(savePath);
 				rootFile.mkdirs();
