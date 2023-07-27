@@ -71,11 +71,11 @@ public class BaitingController {
 	    baitingService.rejectBaiting(baitingId);
 	    return ResponseEntity.ok().build();
 	}
-	
+
 	// 로그인, 로그아웃 처리
 	@PostMapping("/getUserState")
 	public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
-		System.out.println(userState);
+
 		if (userState.equals("로그인")) {
 			return "로그인";
 		} else {

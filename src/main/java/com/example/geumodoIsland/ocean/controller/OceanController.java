@@ -73,7 +73,7 @@ public class OceanController {
     // 로그인, 로그아웃 처리
     @PostMapping("/getUserState")
     public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
-        System.out.println(userState);
+
         if (userState.equals("로그인")) {
             return "로그인";
         } else {
@@ -116,7 +116,7 @@ public class OceanController {
 
         model.addAttribute("loginUserName", "뽑아라");
         model.addAttribute("userList", conditionUserList);
-        System.out.println(conditionUserList);
+
         return new ResponseEntity<>(conditionUserList, HttpStatusCode.valueOf(202));
     }
 
@@ -129,7 +129,7 @@ public class OceanController {
         List<String> userPhotoName = photoService.selectUserPhoto(userId);
         model.addAttribute("userPhotoName", userPhotoName);
 
-        System.out.println(AUserInfo);
+
 
         Date now = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
@@ -141,17 +141,17 @@ public class OceanController {
         model.addAttribute("userInfo", userInfo);
 
         String[] userHobbies = (String[]) AUserInfo.get("userHobbies");
-        System.out.println(userHobbies.length);
+
         model.addAttribute("userHobbies", userHobbies);
 
         String[] userIntroductions = (String[]) AUserInfo.get("userIntroductions");
-        System.out.println("userIntroductions: " + userIntroductions);
+
         model.addAttribute("userIntroductions", userIntroductions);
         model.addAttribute("loginUserId", loginUserId);
 
         int isInAqua = aquaService.selectRowByUserIdTargetId(loginUserId, userId);
         model.addAttribute("isInAqua", isInAqua);
-        System.out.println("isInAqua" + isInAqua);
+
 
         int isThrowBait = fishingService.seclectRowByUserIdTargetId(loginUserId, userId);
         model.addAttribute("isThrowBait", isThrowBait);
@@ -179,7 +179,7 @@ public class OceanController {
         // 해당 유저 가용 미끼 있는지 확인
         int userIdInSession = (int) session.getAttribute("userId");
 
-        System.out.println("ssssss");
+
 
 
 
