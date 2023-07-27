@@ -201,5 +201,11 @@
         WHERE user_email = #{userEmail}
         ]]>
     </update>
+    <select id="selectALLFishListBySexAddress" resultType="com.example.geumodoIsland.user.model.UserBarChart">
+    	<![CDATA[
+        select count(user_id) as countFish, user_sex as userSex, user_address as userAddress from member group by user_sex, user_address   ;
+        ]]>
+    </select>
+
 </mapper>
 

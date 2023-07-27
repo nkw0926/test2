@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.example.geumodoIsland.admin.model.*;
 import com.example.geumodoIsland.user.model.User;
+import com.example.geumodoIsland.user.model.UserBarChart;
 import com.example.geumodoIsland.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -105,7 +106,7 @@ public class AdminController {
         });
 
         model.addAttribute("allUsersWithPhotosFinal", allUsersWithPhotosFinal);
-        
+
         return "admin/p-test";
     }
 
@@ -127,10 +128,10 @@ public class AdminController {
             int userId = Integer.valueOf(userIdInSession);
             List<Notice> notice1 = adminService.getNoticesByUserId(userId);
             List<Notice> notice2 = adminService.getNoticesByReportId(userId);
-            
+
             Collections.sort(notice1, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt())); //정렬
             Collections.sort(notice2, (n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
-            
+
             adminService.setReportCreatedAtForNotices(notice1); //reportCreatedAt 값을 notice의 createdAt으로 설정
             adminService.setReportCreatedAtForNotices(notice2);
             model.addAttribute("notice1", notice1);
@@ -204,6 +205,7 @@ public class AdminController {
 
         return sexList;
     }
+
 
     @GetMapping("/agerange/sex/barChart")
     @ResponseBody
@@ -284,15 +286,15 @@ public class AdminController {
     }
 
     // 로그인, 로그아웃 처리
- 	@PostMapping("/getUserState")
- 	public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
- 		System.out.println(userState);
- 		if (userState.equals("로그인")) {
- 			return "로그인";
- 		} else {
- 			session.invalidate();
- 			return "로그아웃";
- 		}
- 	}
+    @PostMapping("/getUserState")
+    public @ResponseBody String getUserState(@RequestParam("userState") String userState, HttpSession session) {
+        System.out.println(userState);
+        if (userState.equals("로그인")) {
+            return "로그인";
+        } else {
+            session.invalidate();
+            return "로그아웃";
+        }
+    }
 }
 

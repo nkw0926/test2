@@ -2,12 +2,7 @@ package com.example.geumodoIsland.user.service;
 
 import com.example.geumodoIsland.photo.dao.IPhotoRepository;
 import com.example.geumodoIsland.user.dao.IUserRepository;
-import com.example.geumodoIsland.user.model.User;
-import com.example.geumodoIsland.user.model.UserBait;
-import com.example.geumodoIsland.user.model.UserIdAndPassword;
-import com.example.geumodoIsland.user.model.UserPhoto;
-import com.example.geumodoIsland.user.model.UserProfile;
-import com.example.geumodoIsland.user.model.UserUpdatePassword;
+import com.example.geumodoIsland.user.model.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +17,7 @@ import java.util.Map;
 public class UserService implements IUserService {
     @Autowired
     IUserRepository userRepository;
-    
+
     @Autowired
     IPhotoRepository photoRepository;
 
@@ -58,28 +53,28 @@ public class UserService implements IUserService {
 
         return userRepository.selectFishListByAddress(map);
     }
-   
+
     @Transactional
 	public void insertIntoUser(User user, String userEmail, List<String> photoFileNames) {
     	List<UserPhoto> userPhotos = new ArrayList<UserPhoto>();
-    	
+
 		userRepository.insertIntoUser(user);
 		int userId = userRepository.selectUserIdByUserEmail(userEmail);
-		
+
 		photoFileNames.stream().forEach((photoFileName) ->{
 			UserPhoto userPhoto = new UserPhoto();
 			userPhoto.setUserId(userId);
 			userPhoto.setPhotoFileName(photoFileName);
 			userPhotos.add(userPhoto);
 		});
-		
+
 		userPhotos.stream().forEach((userPhoto) -> {
 			photoRepository.insertUserPhoto(userPhoto);
 		});
-		
+
 		UserBait userBait = new UserBait();
 		userBait.setUserId(userId);
-		
+
 		userRepository.insertIntoBait(userBait);
 	}
 
@@ -114,6 +109,11 @@ public class UserService implements IUserService {
 	@Override
 	public void updateUserPassword(UserUpdatePassword userUpdatePassword) {
 		userRepository.updateUserPassword(userUpdatePassword);
+	}
+
+	@Override
+	public List<UserBarChart> selectALLFishListBySexAddress() {
+		return userRepository.selectALLFishListBySexAddress();
 	}
 
 }
